@@ -1,0 +1,208 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.distributeur {
+    background-color: #577fe8;
+    height: 600px;
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    gap: 2rem;
+    border-left: 2px solid #0a1a45;;
+}
+.top {
+    display: flex;
+    flex-direction: row;
+    height: 380px;
+}
+.bottom {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+}
+
+.produits {
+    background-color: #0a1a45;
+    width: 300px;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.produits td {
+    text-align: center;
+}
+
+.produits img,
+ .produit-obtenu img {
+    max-width: fit-content;
+    height: 50px;
+    min-height: 50px;
+}
+
+.choix:first-child {
+    margin-top: 4rem;
+}
+.choix {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.affichage-code-choix,
+.affichage-nom-produit,
+.affichage-prix-produit
+{
+    background-color: #abcd55;
+    width: 80px;
+    text-align: center;
+}
+.affichage-prix-produit {
+    margin-top: -1rem;
+}
+
+.boutons button {
+    border-radius: 10px;
+}
+
+.achat {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.bouton-achat {
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bouton-achat-barre {
+    width: 5px;
+    height: 25px;
+    background-color: gray;
+}
+
+.produit-obtenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #0a1a45;
+    width: 150px;
+    height: 100px;
+    border-radius: 10px;
+}
+
+.produits .img-container {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: auto;
+}
+.produits td .qtt {
+    background-color: white;
+    border-radius: 25px;
+    width: fit-content;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 35px;
+    left: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.produits .img-container,
+.produit-obtenu img
+{
+    transition: background-color .2s, filter .2s;
+}
+
+.produits .img-container:hover,
+.produit-obtenu img:hover,
+.boutons button:hover,
+.bouton-achat:hover
+{
+    filter: brightness(1.5);
+    cursor: pointer;
+}
+.produit-obtenu img:hover {
+    cursor: grab;
+}
+
+.produits .img-container {
+    border: 2px dashed transparent;
+}
+.produits:hover .img-container.empty {
+    border: 2px dashed rgba(128,128,128,0.5);
+}
+.produits .img-container.empty:hover {
+    background-color: rgba(255,255,255,0.5);
+    cursor: copy;
+}
+.produits .img-container.empty * {
+    display: none;
+}
+
+#dialog-modifier-produit .grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+}
+
+.hide {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    body {
+        justify-content: flex-start;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+@media (max-height: 650px) {
+    body {
+        align-items: flex-start;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}

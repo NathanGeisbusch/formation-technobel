@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Distributeur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="distributeur">
+        <div class="left">
+            <div class="top">
+                <table class="produits">
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="bottom">
+                <div class="produit-obtenu">
+                    <img>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="choix">
+                <input class="affichage-code-choix" type="text" value="" disabled>
+                <table class="boutons">
+                    <tbody>
+                    <tr>
+                        <td><button onclick="pushBtn('A')">A</button></td>
+                        <td><button onclick="pushBtn('B')">B</button></td>
+                        <td><button onclick="pushBtn('C')">C</button></td>
+                    </tr>
+                    <tr>
+                        <td><button onclick="pushBtn('D')">D</button></td>
+                        <td><button onclick="pushBtn('E')">E</button></td>
+                        <td><button onclick="pushBtn('F')">F</button></td>
+                    </tr>
+                    <tr>
+                        <td><button onclick="pushBtn('1')">1</button></td>
+                        <td><button onclick="pushBtn('2')">2</button></td>
+                        <td><button onclick="pushBtn('3')">3</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="choix">
+                <input class="affichage-nom-produit" type="text" value="" disabled>
+                <input class="affichage-prix-produit" type="text" value="" disabled>
+                <button class="bouton-achat" onclick="achat()">
+                    <div class="bouton-achat-barre"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <dialog id="dialog-modifier-produit">
+        <div class="grid">
+            <label for="modifier-produit-nom">Nom: </label>
+            <select id="modifier-produit-nom"></select>
+            <label for="modifier-produit-qtt">Quantité: </label>
+            <input id="modifier-produit-qtt" type="number" min="0" step="1">
+            <label for="modifier-produit-prix">Prix: </label>
+            <input id="modifier-produit-prix" type="number" min="0" step="0.01">
+            <button id="annuler-modification-produit">Annuler</button>
+            <button id="valider-modification-produit">Valider</button>
+        </div>
+    </dialog>
+    <script src="script.js"></script>
+</body>
+</html>
