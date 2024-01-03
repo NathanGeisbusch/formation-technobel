@@ -56,7 +56,7 @@ function modifierProduit(index) {
     } else {
         nom.value = 'chips1';
         prix.value = produits.chips1.prix;
-        qtt.value = 0;
+        qtt.value = 1;
     }
     dialogModifierProduit.showModal();
 }
