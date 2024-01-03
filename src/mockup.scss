@@ -1,0 +1,57 @@
+@use './styles/normalize.css';
+@use './assets/img.scss' as img;
+
+html {
+	width: 100%;
+	height: 100%;
+	background: #2e2e2e;
+}
+body {
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.smartphone-container {
+	background-image: url(img.$android_png);
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.smartphone-content {
+	width: calc(882px / 2);
+	height: calc(1384px / 2);
+	padding: calc(219px / 2) calc(45px / 2) calc(317px / 2) calc(37px / 2);
+}
+#smartphone-page {
+	background: #c2c2c2;
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+@media screen and (max-height: 850px) {
+	body {
+		height: auto;
+	}
+}
+@media screen and (max-width: 500px) {
+	body {
+		padding: 10px 20px;
+	}
+}
+@media screen and (max-width: 430px) {
+	body {
+		padding: 10px 60px;
+	}
+}
+@media screen and (max-width: 365px) {
+	body {
+		padding: 10px 90px;
+	}
+}
+@media screen and (max-width: 300px) {
+	body {
+		padding: 10px 120px;
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "name": "beco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "compile.js",
+  "keywords": [],
+  "author": "Nathan Geisbusch",
+  "license": "CC-BY",
+  "devDependencies": {
+    "chokidar": "^3.5.3",
+    "esbuild": "^0.19.2",
+    "glob": "^10.3.4",
+    "minimatch": "^9.0.3",
+    "pug": "^3.0.2",
+    "sass": "^1.66.1"
+  }
+}

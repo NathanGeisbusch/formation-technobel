@@ -1,0 +1,380 @@
+@use './styles/normalize.css';
+@use './libs/f7/framework7-bundle.min.css';
+@use './libs/f7/framework7-icons.scss';
+@use './assets/img.scss' as img;
+
+//-----------------------------------------------
+// Fix layout F7
+
+.navbar {
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px,
+		rgba(0, 0, 0, 0.07) 0px 1px 1px 0px,
+		rgba(0, 0, 0, 0.06) 0px 1px 3px 0px;
+}
+.toolbar {
+	box-shadow: rgba(140,159,106,.2) 0px -2px 1px -1px,
+	rgba(140,159,106,.17) 0px -1px 1px 0px,
+	rgba(140,159,106,.16) 0px -2px 3px 0px;
+}
+
+.navbar-inner {
+	.left, .right {
+		height:100%;
+		justify-content: center;
+	}
+}
+
+.menu-list.fix ul::before,
+.menu-list.fix ul::after {
+	background: none !important;
+}
+
+.page-content {
+	padding-bottom: 0 !important;
+}
+
+.dialog-preloader.modal-out {
+	display: none !important;
+}
+
+.card-content.line-break {
+	white-space: pre-line;
+}
+
+.block > span > i,
+.card-header > span > i {
+	margin-right: .25em;
+}
+
+.card {
+	margin: 2em !important;
+}
+
+.block .chip {
+	margin: 2px 4px 2px 0;
+}
+
+.block.marginV24 {
+	margin: 24px 0;
+}
+
+.dialog-repair-failure-cause .dialog-buttons {
+	justify-content: center;
+}
+.dialog-repair-failure-cause .dialog-text {
+	text-align: center;
+}
+.smart-select-no-icon .icon-radio {
+	display: none;
+}
+.block.slider-block {
+	margin-top: 8px;
+	margin-bottom: 16px;
+}
+.item-content-slider {
+	margin-left: inherit !important;
+	margin-right: inherit !important;
+	padding-top: inherit !important;
+	padding-bottom: inherit !important;
+}
+.item-content-slider::before,
+.item-content-slider::after {
+	background: inherit !important;
+	background-color: inherit !important;
+}
+
+.menu-sheet-top {
+	height: auto;
+}
+
+.autocomplete-dropdown-inner {
+	overflow: hidden !important;
+}
+.autocomplete-dropdown-inner ul {
+	overflow-y: scroll;
+	max-height: 450px;
+}
+
+//-----------------------------------------------
+// APP STYLE
+
+.flex {
+	display: flex !important;
+}
+.flex-col {
+	display: flex !important;
+	flex-direction: column !important;
+}
+.flex.center {
+	justify-content: center !important;
+	align-items: center !important;
+}
+.flex-col-center-h {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+}
+
+.left svg-container.logo {
+	margin-left: 10px;
+}
+.right svg-container.logo {
+	margin-right: 10px;
+}
+svg-container.logo {
+	height: 60%;
+  width: 100%;
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+	&.logo-home {
+		height: 128px;
+	}
+}
+.page.noscroll .page-content {
+	overflow: hidden;
+}
+.relative {
+	position: relative;
+}
+.detail-price {
+	position: absolute;
+	bottom: -.5rem;
+	right: 3rem;
+	border-radius: 100%;
+	height: fit-content;
+	width: fit-content;
+	font-size: 1.5rem;
+	background-color: #fff;
+	display: flex;
+	justify-content: center;
+	padding: 1rem;
+	align-items: center;
+	box-shadow: 0 0 4px #000;
+}
+
+.daily-tip {
+	background:#ffa
+}
+
+.svg-badge {
+	display: flex !important;
+	gap: .5em;
+	align-items: center;
+	min-height: calc(120px - 64px);
+	max-height: calc(120px - 64px);
+	&.detail {
+		flex-direction: column;
+		align-items: inherit;
+		min-height: inherit;
+		max-height: inherit;
+		margin-top: 0 !important;
+		margin-bottom: 0 !important;
+		span:first-child {
+			margin-right: .5rem;
+		}
+		.card-content {
+			display: flex !important;
+			flex-direction: column;
+			gap: .5em;
+		}
+	}
+}
+.svg-badge svg-container {
+	display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.svg-badge .badge {
+	border-radius: 100%;
+  width: 36px;
+  height: 36px;
+}
+.svg-badge svg {
+	width: 24px;
+	height: 24px;
+}
+.badge.color-orange svg,
+.badge.color-teal svg,
+.badge.color-color-slateblue svg,
+.badge.color-blue svg {
+	width: 28px;
+	height: 28px;
+}
+.badge.color-gray {
+	--f7-theme-color: gray;
+}
+.badge.color-beige {
+	--f7-theme-color: darkkhaki;
+}
+.badge.color-slateblue {
+	--f7-theme-color: slateblue;
+}
+.badge.color-yellow {
+	--f7-theme-color: #dfb10d !important;
+}
+.badge.color-orange {
+	--f7-theme-color: #d17029 !important;
+}
+.badge.color-green {
+	--f7-theme-color: #23991a !important;
+}
+
+.technical-sheet {
+	.card-header {
+		padding-bottom: 0;
+	}
+	.card-content {
+		padding-top: 0;
+	}
+}
+
+.page-content::-webkit-scrollbar,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar {
+  width: 10px;
+}
+.page-content::-webkit-scrollbar-track,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar-track {
+	background: transparent;
+}
+.page-content::-webkit-scrollbar-thumb,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+.page-content::-webkit-scrollbar-thumb:hover,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.page-content {
+	height: calc(100% - 64px);
+	margin-top: calc(var(--f7-page-navbar-offset, 0px)
+	+ var(--f7-page-toolbar-top-offset, 0px)
+	+ var(--f7-page-subnavbar-offset, 0px)
+	+ var(--f7-page-searchbar-offset, 0px)
+	+ var(--f7-page-content-extra-padding-top, 0px));
+	padding-top: inherit;
+}
+.page-content {
+	scrollbar-width: thin;
+}
+#tab-home, #tab-buy {
+	padding-bottom: inherit;
+	height: calc(100% - 80px - 64px);
+}
+
+.repair-map {
+	width: 150%;
+	cursor: pointer;
+}
+
+//-----------------------------------------------
+// THEME (couleurs)
+
+$primary-color: #b056ac;
+$primary-color-dark: #90368c;
+$primary-color-rgb: rgb(176, 86, 172);
+$primary-color-ripple: rgba(176, 86, 172, 0.75);
+$bg-color-1: #daf7a6;
+$bg-color-1s1: rgba(140, 159, 106, 0.2);
+$bg-color-1s2: rgba(140, 159, 106, 0.17);
+$bg-color-1s3: rgba(140, 159, 106, 0.16);
+$bg-color-2: #e8fcc3;
+
+.list .item-subtitle {
+	--f7-list-item-subtitle-font-size: 12px;
+}
+
+:root {
+	--f7-dialog-font-size: 12px;
+	--f7-card-font-size: 12px;
+	--f7-md-primary-rgb: #{$primary-color-rgb};
+	--f7-md-primary: #{$primary-color};
+	--f7-block-title-text-color: #{$primary-color};
+	--f7-dialog-button-text-color: #{$primary-color};
+	--f7-searchbar-input-bg-color: #{$primary-color};
+	--f7-dialog-bg-color: #{$bg-color-1};
+	--f7-bars-bg-color: #{$bg-color-1};
+	--f7-tabbar-link-active-icon-bg-color: #{$primary-color};
+	--f7-sheet-bg-color: #{$bg-color-2};
+	--f7-menu-list-item-bg-color: #{$bg-color-1};
+	--f7-menu-list-item-selected-bg-color: #{$primary-color};
+	--f7-menu-list-item-selected-text-color: white;
+	--f7-tabbar-link-active-color: white;
+	--f7-subnavbar-text-color: white;
+	--f7-searchbar-link-color: white;
+	--f7-searchbar-input-clear-button-color: white;
+	--f7-searchbar-placeholder-color: unset;
+	--f7-searchbar-search-icon-color: unset;
+	--f7-searchbar-input-text-color: rgba(255,255,255,.75);
+	--f7-autocomplete-dropdown-text-matching-color: #d5f994;
+	--f7-list-strong-bg-color: #{$bg-color-1};
+	--f7-chip-bg-color: #{$primary-color};
+	--f7-chip-text-color: white;
+	--f7-radio-active-color: #{$primary-color};
+	--f7-checkbox-active-color: #{$primary-color};
+	--f7-toggle-active-border-color: #{$primary-color};
+	--f7-toggle-active-bg-color: #{$primary-color};
+	--f7-range-bar-active-bg-color: #{$primary-color};
+	--f7-range-knob-color: #{$primary-color};
+	--f7-range-label-bg-color: #{$primary-color};
+	--f7-range-label-text-color: white;
+	--f7-preloader-color: #{$primary-color};
+}
+.searchbar {
+	--f7-list-item-title-text-color: white;
+}
+.sheet-modal {
+	--f7-sheet-bg-color: #{$bg-color-1};
+	--f7-menu-list-item-bg-color: #{$bg-color-1};
+}
+.button-tonal {
+	--f7-button-bg-color: #{$primary-color};
+	--f7-button-text-color: white;
+	.ripple-wave {
+		--f7-touch-ripple-color: rgba(255,255,255,.25);
+	}
+}
+.tab-link-active .tabbar-label {
+	color: $primary-color;
+}
+.page {
+	background-color: $bg-color-2;
+}
+.navbar.fix-border {
+	box-shadow: $bg-color-1s1 0px 2px 1px -1px,
+	$bg-color-1s2 0px 1px 1px 0px,
+	$bg-color-1s3 0px 1px 3px 0px;
+}
+.accordion-item-content {
+	background-color: transparent;
+}
+.ripple-wave {
+	--f7-touch-ripple-color: #{$primary-color-ripple};
+}
+.svg-badge svg {
+	fill: white;
+}
+
+.badge.color-slateblue,
+.badge.color-orange,
+.badge.color-green {
+	stroke: white;
+}
+
+.page-content::-webkit-scrollbar-track,
+.autocomplete-dropdown-inner ul:-webkit-scrollbar-track {
+  background: transparent;
+}
+.page-content::-webkit-scrollbar-thumb,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar-thumb {
+  background: $primary-color-dark;
+}
+.page-content::-webkit-scrollbar-thumb:hover,
+.autocomplete-dropdown-inner ul::-webkit-scrollbar-thumb:hover {
+  background: $primary-color-dark;
+}
+
+.accordion-list ul, .card:not(.daily-tip) {
+	background: linear-gradient(45deg, #d5f994, #4fbd111f);
+}
