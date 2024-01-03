@@ -3,11 +3,21 @@
 ## Implémentation Java
 
 ```java
-var json = JSON.toString(obj);
+public class Main {
+    public static void main(String[] args) {
+        var data = new Object() { final int value = 5; };
+        String result = Json.toString(data);
+        System.out.println(result);
+    }
+}
 ```
 
 ## Implémentation Kotlin
 
 ```kotlin
-val json = obj.toJSON().toString();
+fun main() {
+    val data = object { val value = 5 }
+    val result = data.toJSON().toString()
+    println(result)
+}
 ```
