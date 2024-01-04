@@ -1,4 +1,4 @@
-# Formation Technobel (2023-06 -> 2024-03)
+# Formation Technobel (2023-06 → 2024-03)
 
 Vous trouverez ici les différents exercices et projets que j'ai réalisés dans le cadre de ma formation.
 
