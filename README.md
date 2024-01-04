@@ -1,6 +1,6 @@
 # Implémentation d'une fonction pour convertir un objet en JSON
 
-## Implémentation Java
+## Utilisation de l'implémentation Java
 
 ```java
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
 }
 ```
 
-## Implémentation Kotlin
+## Utilisation de l'implémentation Kotlin
 
 ```kotlin
 fun main() {
