@@ -1,4 +1,4 @@
-# Implémentation d'une fonction pour convertir un objet en JSON
+# Fonction pour convertir un objet en JSON
 
 ## Utilisation de l'implémentation Java
 
