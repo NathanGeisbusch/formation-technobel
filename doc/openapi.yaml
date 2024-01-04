@@ -1,0 +1,3394 @@
+openapi: 3.0.0
+info:
+  title: Playzone API
+  version: '0.1'
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /api/auth/sign-in:
+    parameters: []
+    post:
+      summary: Se connecter
+      operationId: post-api-auth-sign-in
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                required:
+                  - token
+              examples:
+                Example 1:
+                  value:
+                    token: BEARER ...
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      description: ''
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - login
+                - password
+  /api/auth/sign-out:
+    post:
+      summary: Se déconnecter
+      operationId: post-api-auth-sign-out
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      tags:
+        - auth
+      security:
+        - ADMIN: []
+        - USER: []
+  /api/auth/change-password:
+    post:
+      summary: Effectuer une demande de changement de mot de passe
+      operationId: post-api-auth-recover-password
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+            examples: {}
+        description: ''
+      tags:
+        - auth
+      description: |-
+        Envoie un email de changement de mot de passe à l'utilisateur.
+        Ce mail contient un lien vers une page pour changer son mot de passe.
+    parameters: []
+  '/api/auth/change-password/{token}':
+    post:
+      summary: Modifier le mot de passe
+      operationId: post-api-auth-change-password
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '404':
+          description: Not Found
+          content: {}
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+              required:
+                - password
+      tags:
+        - auth
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: token
+        in: path
+        required: true
+        description: token identifiant la demande de changement de mot de passe
+  /api/auth/profile:
+    get:
+      summary: Récupérer l'utilisateur connecté
+      tags:
+        - auth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+      operationId: get-api-auth-profile
+      security:
+        - ADMIN: []
+        - USER: []
+  /api/users:
+    get:
+      summary: Récupérer des utilisateurs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: integer
+                    minimum: 0
+                  page:
+                    type: integer
+                    minimum: 0
+                  size:
+                    type: integer
+                    minimum: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      operationId: get-api-users
+      security:
+        - ADMIN: []
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: index de la pagination
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: size
+          description: taille de la pagination
+          required: true
+      tags:
+        - user
+    post:
+      summary: Créer un utilisateur
+      operationId: post-api-users
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: '/api/users/{userId}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Created'
+              examples: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorConflict'
+      security:
+        - ADMIN: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFormCreate'
+        description: ''
+      tags:
+        - user
+  '/api/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: userId
+        in: path
+        required: true
+        description: id d'un utilisateur
+    get:
+      summary: Récupérer un utilisateur
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-users-userId
+      security:
+        - ADMIN: []
+    patch:
+      summary: Modifier un utilisateur
+      operationId: patch-api-users-userId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorConflict'
+      security:
+        - ADMIN: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFormPatch'
+      tags:
+        - user
+    delete:
+      summary: Supprimer un utilisateur
+      operationId: delete-api-users-userId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+      tags:
+        - user
+  /api/users-emails:
+    get:
+      summary: Récupérer des adresses email
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: email
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      operationId: get-api-users-emails
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: email
+      description: Récupère des adresses email (maximum 10) commençant par la valeur du paramètre 'email'
+      tags:
+        - user
+    parameters: []
+  /api/projects:
+    parameters: []
+    get:
+      summary: Récupérer des projets
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: integer
+                    minimum: 0
+                  page:
+                    type: integer
+                    minimum: 0
+                  size:
+                    type: integer
+                    minimum: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      operationId: get-api-projects
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+          in: query
+          name: page
+          description: index de la pagination
+          required: true
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: size
+          description: taille de la pagination
+          required: true
+        - schema:
+            type: string
+            enum:
+              - OWNER
+              - SHARED
+              - PUBLIC
+          in: query
+          name: from
+          description: 'pour n''afficher que les projets créés par l''utilisateur connecté, ou les projets partagés avec l''utilisateur connecté, ou les projets publics de tous les utilisateurs, sinon affiche tous les projets si ce champ est omis et que l''utilisateur connecté est un administrateur'
+    post:
+      summary: Créer un projet
+      operationId: post-api-projects-projectId
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: '/api/projects/{projectId}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Created'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectFormCreate'
+      tags:
+        - project
+  '/api/projects/{projectId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+    get:
+      summary: Récupérer un projet
+      tags:
+        - project
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId
+      security:
+        - ADMIN: []
+        - USER: []
+    put:
+      summary: Modifier un projet
+      operationId: put-api-projects-projectId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectFormUpdate'
+      tags:
+        - project
+    delete:
+      summary: Supprimer un projet
+      operationId: delete-api-projects-projectId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - project
+  '/api/projects/{projectId}/schema':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        description: id du projet
+        required: true
+    get:
+      summary: Récupérer le schéma d'un projet
+      tags:
+        - schema
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchemaTable'
+              examples:
+                Example 1:
+                  value:
+                    - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      table: DimNace
+                      fact: false
+                      headers:
+                        - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          name: SKNace
+                          type: NUMBER
+                          pk: true
+                      coord:
+                        x: 10
+                        'y': 20
+                      log:
+                        createdAt: '2019-08-24T14:15:22.000Z'
+                        createdBy: user@example.com
+                        updatedAt: '2019-08-24T14:15:22.000Z'
+                        updatedBy: user@example.com
+                    - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      table: FactEffectifs
+                      fact: true
+                      headers:
+                        - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          name: NaceFK
+                          type: STRING
+                          pk: false
+                          fk:
+                            table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                            field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      coord:
+                        x: 10
+                        'y': 20
+                      log:
+                        createdAt: '2019-08-24T14:15:22.000Z'
+                        createdBy: user@example.com
+                        updatedAt: '2019-08-24T14:15:22.000Z'
+                        updatedBy: user@example.com
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId-schema
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters: []
+    put:
+      summary: Modifier le schéma d'un projet
+      operationId: put-api-projects-projectId-schema
+      responses:
+        '204':
+          description: No Content
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SchemaTableForm'
+            examples:
+              Example 1:
+                value:
+                  - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    fact: false
+                    headers:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        pk: true
+                    coord:
+                      x: 10
+                      'y': 20
+                  - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    fact: true
+                    headers:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        pk: false
+                        fk:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    coord:
+                      x: 10
+                      'y': 20
+        description: ''
+      tags:
+        - schema
+  /api/tables:
+    parameters: []
+    get:
+      summary: Récupérer des tables
+      tags:
+        - table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: integer
+                    minimum: 0
+                  page:
+                    type: integer
+                    minimum: 0
+                  size:
+                    type: integer
+                    minimum: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DataTable'
+              examples:
+                Example 1:
+                  value:
+                    pages: 0
+                    page: 0
+                    size: 1
+                    data:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        table: DimNace
+                        headers:
+                          - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                            name: SKNace
+                          - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                            name: CodeNace
+                        log:
+                          createdAt: '2019-08-24T14:15:22.000Z'
+                          updatedAt: '2019-08-24T14:15:22.000Z'
+                          createdBy: user@example.com
+                          updatedBy: user@example.com
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      operationId: get-api-tables
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+          in: query
+          name: page
+          description: index de la pagination
+          required: true
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: size
+          description: taille de la pagination
+          required: true
+        - schema:
+            type: string
+            enum:
+              - OWNER
+              - SHARED
+          in: query
+          description: '(facultatif) pour n''afficher que les tables créées par l''utilisateur connecté, ou les tables partagées avec l''utilisateur connecté, sinon affiche toutes les tables si ce champ est omis'
+          name: from
+    post:
+      summary: Créer une table
+      operationId: post-api-tables-tableId
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: '/api/tables/{tableId}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Created'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataTableFormCreate'
+            examples:
+              Example 1:
+                value:
+                  table: DimNace
+                  headers:
+                    - name: SKNace
+                    - name: CodeNace
+      tags:
+        - table
+  '/api/tables/{tableId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id d'une table
+    get:
+      summary: Récupérer une table
+      tags:
+        - table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataTable'
+              examples:
+                Example 1:
+                  value:
+                    id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    table: DimNace
+                    headers:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        name: SKNace
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        name: CodeNace
+                    log:
+                      createdAt: '2023-11-29T17:15:05.914Z'
+                      updatedAt: '2023-11-29T17:15:05.914Z'
+                      createdBy: user@example.com
+                      updatedBy: user@example.com
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-tables-tableId
+      security:
+        - ADMIN: []
+        - USER: []
+    put:
+      summary: Modifier une table
+      operationId: put-api-tables-tableId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataTableFormCreate'
+            examples:
+              Example 1:
+                value:
+                  table: DimNace
+                  headers:
+                    - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      name: SKNace
+                    - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      name: CodeNace
+        description: ''
+      tags:
+        - table
+    delete:
+      summary: Supprimer une table
+      operationId: delete-api-tables-tableId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - table
+  '/api/tables/{tableId}/data':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+    get:
+      summary: Récupérer des données
+      tags:
+        - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: integer
+                    minimum: 0
+                  page:
+                    type: integer
+                    minimum: 0
+                  size:
+                    type: integer
+                    minimum: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Data'
+              examples:
+                Example 1:
+                  value:
+                    pages: 1
+                    page: 0
+                    size: 10
+                    data:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        values:
+                          field1: ''
+                          field2: '0'
+                          field3: '0.1'
+                        log:
+                          createdAt: '2019-08-24T14:15:22Z'
+                          updatedAt: '2019-08-24T14:15:22Z'
+                          createdBy: user@example.com
+                          updatedBy: user@example.com
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId-data
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+          in: query
+          name: page
+          description: index de la pagination
+          required: true
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: size
+          description: taille de la pagination
+          required: true
+    post:
+      summary: Ajouter des données
+      operationId: post-api-projects-projectId-data
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: '/api/tables/{tableId}/data'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DataForm'
+            examples:
+              Example 1:
+                value:
+                  - field1: ''
+                    field2: '0'
+                    field3: '0.1'
+      tags:
+        - data
+    put:
+      summary: Modifier des données
+      operationId: put-api-tables-tableId-data
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DataForm'
+            examples:
+              Example 1:
+                value:
+                  - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    values:
+                      field1: ''
+                      field2: '0'
+                      field3: '0.1'
+      tags:
+        - data
+  '/api/tables/{tableId}/data/{dataId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: dataId
+        in: path
+        required: true
+        description: id de la donnée
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+    get:
+      summary: Récupérer une donnée
+      tags:
+        - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+              examples:
+                Example 1:
+                  value:
+                    id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    values:
+                      field1: ''
+                      field2: '0'
+                      field3: '0.1'
+                    log:
+                      createdAt: '2019-08-24T14:15:22Z'
+                      updatedAt: '2019-08-24T14:15:22Z'
+                      createdBy: user@example.com
+                      updatedBy: user@example.com
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId-data-dataId
+      description: Équivalent d'une ligne du CSV
+      security:
+        - ADMIN: []
+        - USER: []
+    put:
+      summary: Modifier une donnée
+      operationId: put-api-tables-tableId-data-dataId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataForm'
+            examples:
+              Example 1:
+                value:
+                  field1: ''
+                  field2: '0'
+                  field3: '0.1'
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - data
+    delete:
+      summary: Supprimer une donnée
+      operationId: delete-api-tables-tableId-data-dataId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - data
+  '/api/tables/{tableId}/bulkDeleteData':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+    post:
+      summary: Supprimer des données
+      operationId: post-api-tables-tableId-data-bulkDelete
+      responses:
+        '204':
+          description: No Content
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            examples:
+              Example 1:
+                value:
+                  - 01BX5ZZKBKACTAV9WEVGEMMVRY
+      tags:
+        - data
+  '/api/projects/{projectId}/views':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+    get:
+      summary: Récupérer des vues
+      tags:
+        - view
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: integer
+                    minimum: 0
+                  page:
+                    type: integer
+                    minimum: 0
+                  size:
+                    type: integer
+                    minimum: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/View'
+              examples:
+                Example 1:
+                  value:
+                    pages: 0
+                    page: 0
+                    size: 1
+                    data:
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        log:
+                          createdAt: '2019-08-24T14:15:22Z'
+                          updatedAt: '2019-08-24T14:15:22Z'
+                          createdBy: user@example.com
+                          updatedBy: user@example.com
+                        chart: BAR
+                        label:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        data:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          value: Menuiserie
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        log:
+                          createdAt: '2019-08-24T14:15:22Z'
+                          updatedAt: '2019-08-24T14:15:22Z'
+                          createdBy: user@example.com
+                          updatedBy: user@example.com
+                        chart: PIE
+                        label:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        data:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          value: null
+                      - id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        log:
+                          createdAt: '2019-08-24T14:15:22Z'
+                          updatedAt: '2019-08-24T14:15:22Z'
+                          createdBy: user@example.com
+                          updatedBy: user@example.com
+                        chart: PIE
+                        label:
+                          table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                          field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                        data: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: get-api-projects-id-views
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          description: index de la pagination
+          name: page
+        - schema:
+            type: integer
+          in: query
+          description: taille de la pagination
+          name: size
+    post:
+      summary: Créer une vue
+      operationId: post-api-projects-projectId-views
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: '/api/projects/{projectId}/views/{viewId}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Created'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - view
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewForm'
+            examples:
+              Example 1:
+                value:
+                  chart: BAR
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 2:
+                value:
+                  chart: PIE
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 3:
+                value:
+                  chart: PIE
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    value: Menuiserie
+  '/api/projects/{projectId}/views/{viewId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: viewId
+        in: path
+        required: true
+        description: id de la vue
+    get:
+      summary: Récupérer une vue
+      tags:
+        - view
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+              examples:
+                Example 1:
+                  value:
+                    id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    log:
+                      createdAt: '2019-08-24T14:15:22Z'
+                      updatedAt: '2019-08-24T14:15:22Z'
+                      createdBy: user@example.com
+                      updatedBy: user@example.com
+                    chart: BAR
+                    label:
+                      table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    data:
+                      table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      value: Menuiserie
+                Example 2:
+                  value:
+                    id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    log:
+                      createdAt: '2019-08-24T14:15:22Z'
+                      updatedAt: '2019-08-24T14:15:22Z'
+                      createdBy: user@example.com
+                      updatedBy: user@example.com
+                    chart: PIE
+                    label:
+                      table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    data:
+                      table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      value: null
+                Example 3:
+                  value:
+                    id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    log:
+                      createdAt: '2019-08-24T14:15:22Z'
+                      updatedAt: '2019-08-24T14:15:22Z'
+                      createdBy: user@example.com
+                      updatedBy: user@example.com
+                    chart: PIE
+                    label:
+                      table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                      field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    data: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId-views-viewId
+      security:
+        - ADMIN: []
+        - USER: []
+    put:
+      summary: Modifier une vue
+      operationId: put-api-projects-projectId-views-viewId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewForm'
+            examples:
+              Example 1:
+                value:
+                  chart: BAR
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 2:
+                value:
+                  chart: PIE
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 3:
+                value:
+                  chart: PIE
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    value: Menuiserie
+      tags:
+        - view
+    delete:
+      summary: Supprimer une vue
+      operationId: delete-api-projects-projectId-views-viewId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - view
+  '/api/projects/{projectId}/views/{viewId}/chart':
+    get:
+      summary: Générer les données d'un graphique à partir d'une vue
+      tags:
+        - view
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chart'
+              examples:
+                Example 1:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: Employe.e
+                        data:
+                          - 430.2
+                          - 1378
+                          - 1286
+                          - 588
+                          - 787
+                          - 1355
+                          - 2997
+                          - 5273
+                          - 3935
+                          - 3396
+                          - 2201
+                      - label: Ouvrier.e
+                        data:
+                          - 621.1
+                          - 2891
+                          - 2585
+                          - 1827
+                          - 1336
+                          - 903
+                          - 5215
+                          - 2021
+                          - 9382
+                          - 6105
+                          - 4205
+                Example 2:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: None
+                        data:
+                          - 1051.3
+                          - 4269
+                          - 3871
+                          - 2415
+                          - 2123
+                          - 2258
+                          - 8212
+                          - 7294
+                          - 13317
+                          - 9501
+                          - 6406
+                Example 3:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: Employe.e
+                        data:
+                          - 430.2
+                          - 1378
+                          - 1286
+                          - 588
+                          - 787
+                          - 1355
+                          - 2997
+                          - 5273
+                          - 3935
+                          - 3396
+                          - 2201
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: get-api-projects-projectId-views-viewId-chart
+      security:
+        - ADMIN: []
+        - USER: []
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: viewId
+        in: path
+        required: true
+        description: id de la vue
+  '/api/projects/{projectId}/chart':
+    post:
+      summary: Générer les données d'un graphique
+      tags:
+        - view
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chart'
+              examples:
+                Example 1:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: Employe.e
+                        data:
+                          - 430.2
+                          - 1378
+                          - 1286
+                          - 588
+                          - 787
+                          - 1355
+                          - 2997
+                          - 5273
+                          - 3935
+                          - 3396
+                          - 2201
+                      - label: Ouvrier.e
+                        data:
+                          - 621.1
+                          - 2891
+                          - 2585
+                          - 1827
+                          - 1336
+                          - 903
+                          - 5215
+                          - 2021
+                          - 9382
+                          - 6105
+                          - 4205
+                Example 2:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: None
+                        data:
+                          - 1051.3
+                          - 4269
+                          - 3871
+                          - 2415
+                          - 2123
+                          - 2258
+                          - 8212
+                          - 7294
+                          - 13317
+                          - 9501
+                          - 6406
+                Example 3:
+                  value:
+                    labels:
+                      - BW
+                      - HAINAUT
+                      - LIEGE
+                      - LUXEMBOURG
+                      - NAMUR
+                      - BRUXELLES
+                      - ANVERS
+                      - BR. FLAMAND
+                      - FLANDRE OCC.
+                      - FLANDRE OR.
+                      - LIMBOURG
+                    datasets:
+                      - label: Employe.e
+                        data:
+                          - 430.2
+                          - 1378
+                          - 1286
+                          - 588
+                          - 787
+                          - 1355
+                          - 2997
+                          - 5273
+                          - 3935
+                          - 3396
+                          - 2201
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: post-api-projects-projectId-chart
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewForm'
+            examples:
+              Example 1:
+                value:
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 2:
+                value:
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              Example 3:
+                value:
+                  label:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  data:
+                    table: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    value: Menuiserie
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+  '/api/project/{projectId}/permissions':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+    get:
+      summary: Récupérer les permissions d'accès à un projet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPermissions'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-projectId-permissions
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+  '/api/project/{projectId}/permissions/{userEmailBase64}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: userEmailBase64
+        in: path
+        required: true
+        description: email en base64 de l'utilisateur avec qui partager le projet
+    get:
+      summary: Récupérer une permission d'accès à un projet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPermission'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-projects-id-permissions
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+    post:
+      summary: Créer ou modifier une permission d'accès à un projet
+      operationId: put-api-projects-id-permissions
+      responses:
+        '204':
+          description: No Content
+          headers: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectPermission'
+      tags:
+        - permission
+    delete:
+      summary: Supprimer une permission d'accès à un projet
+      operationId: delete-api-projects-id-permissions
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+  '/api/tables/{tableId}/permissions':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id d'une table
+    get:
+      summary: Récupérer les permissions d'accès à une table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TablePermissions'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-tables-tableId-permissions
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+  '/api/tables/{tableId}/permissions/{userEmailBase64}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id d'une table
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: userEmailBase64
+        in: path
+        required: true
+        description: email en base64 de l'utilisateur avec qui partager la table
+    get:
+      summary: Récupérer une permission d'accès à une table
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TablePermission'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      operationId: get-api-tables-id-permissions
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+    post:
+      summary: Créer ou modifier une permission d'accès à une table
+      operationId: put-api-tables-id-permissions
+      responses:
+        '204':
+          description: No Content
+          headers: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TablePermission'
+      tags:
+        - permission
+    delete:
+      summary: Supprimer une permission d'accès à une table
+      operationId: delete-api-tables-id-permissions
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - permission
+  '/api/projects/{projectId}/schema/tables':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+    get:
+      summary: Récupérer la liste des id des tables du schéma d'un projet
+      tags:
+        - schema
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: get-api-projects-projectId-schema-tables
+      security:
+        - ADMIN: []
+        - USER: []
+  '/api/projects/{projectId}/schema/tables-deleted':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+    get:
+      summary: Récupérer la liste des id des tables (supprimées) du schéma d'un projet
+      tags:
+        - schema
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: get-api-projects-projectId-schema-tables-deleted
+      security:
+        - ADMIN: []
+        - USER: []
+  '/api/projects/{projectId}/schema/tables/{tableId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+    post:
+      summary: Ajouter une table au schéma d'un projet
+      operationId: post-api-projects-projectId-schema-tables-tableId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+          content: {}
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - schema
+    delete:
+      summary: Retirer une table du schéma d'un projet
+      operationId: delete-api-projects-projectId-schema-tables-tableId
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      tags:
+        - schema
+  '/api/project/{projectId}/schema/tables/{tableId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+    patch:
+      summary: Modifier les métadonnées d'une table dans le schéma d'un projet
+      operationId: patch-api-project-projectId-schema-tables-tableId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fact:
+                  type: boolean
+                coord:
+                  type: object
+                  required:
+                    - x
+                    - 'y'
+                  properties:
+                    x:
+                      type: number
+                    'y':
+                      type: number
+              required:
+                - fact
+                - coord
+      tags:
+        - schema
+  '/api/project/{projectId}/schema/headers/{headerId}':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: projectId
+        in: path
+        required: true
+        description: id du projet
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: headerId
+        in: path
+        required: true
+        description: id de la colonne
+    patch:
+      summary: Modifier les métadonnées d'une colonne dans le schéma d'un projet
+      operationId: patch-api-project-projectId-schema-headers-headerId
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      security:
+        - ADMIN: []
+        - USER: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pk:
+                  type: boolean
+                fk:
+                  type: object
+                  properties:
+                    table:
+                      type: string
+                      example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                    field:
+                      type: string
+                      example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+      tags:
+        - schema
+  '/api/tables/{tableId}/headers/{headerId}/search':
+    parameters:
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: tableId
+        in: path
+        required: true
+        description: id de la table
+      - schema:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name: headerId
+        in: path
+        required: true
+        description: id de la colonne
+    get:
+      summary: Récupérer des valeurs d'une colonne
+      tags:
+        - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                Example 1:
+                  value:
+                    - LIEGE
+                    - LUXEMBOURG
+                    - LIMBOURG
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForm'
+              examples: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorForbidden'
+        '404':
+          description: Not Found
+      operationId: get-api-tables-tableId-headers-headerId-search
+      description: Récupère maximum 20 valeurs d'une colonne
+      security:
+        - ADMIN: []
+        - USER: []
+      parameters:
+        - schema:
+            type: string
+            example: L
+          in: query
+          name: value
+          description: valeur pour une colonne
+components:
+  schemas:
+    Profile:
+      title: Profile
+      type: object
+      x-examples: {}
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+    User:
+      title: User
+      type: object
+      x-examples: {}
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          example: USER
+          description: '"USER" ou "ADMIN"'
+        isActivated:
+          type: boolean
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - role
+        - isActivated
+        - log
+    UserFormCreate:
+      title: UserFormCreate
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        role:
+          type: string
+          example: USER
+          description: '"USER" ou "ADMIN"'
+        isActivated:
+          type: boolean
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - role
+    UserFormPatch:
+      title: UserFormPatch
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        role:
+          type: string
+          example: USER
+          description: '"USER" ou "ADMIN"'
+        isActivated:
+          type: boolean
+    Project:
+      title: Project
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        name:
+          type: string
+          example: Projet Emplois 2023
+        description:
+          type: string
+          example: Statistiques de l'emploi en 2023
+        isPublic:
+          type: boolean
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+      required:
+        - id
+        - name
+        - description
+        - isPublic
+        - log
+    ProjectFormCreate:
+      title: ProjectFormCreate
+      type: object
+      properties:
+        name:
+          type: string
+          example: Projet Emplois 2023
+        description:
+          type: string
+          example: Statistiques de l'emploi en 2023
+      required:
+        - name
+        - description
+    ProjectFormUpdate:
+      title: ProjectFormUpdate
+      type: object
+      properties:
+        name:
+          type: string
+          example: Projet Emplois 2023
+        description:
+          type: string
+          example: Statistiques de l'emploi en 2023
+        isPublic:
+          type: boolean
+      required:
+        - name
+        - description
+        - isPublic
+    ProjectPermission:
+      title: ProjectPermission
+      type: object
+    ProjectPermissions:
+      title: ProjectPermissions
+      type: array
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+        required:
+          - email
+    TablePermission:
+      title: TablePermission
+      type: object
+    TablePermissions:
+      title: TablePermissions
+      type: array
+      items:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+        required:
+          - email
+    DataTable:
+      title: DataTable
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        table:
+          type: string
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              name:
+                type: string
+            required:
+              - id
+              - name
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+      required:
+        - id
+        - table
+        - headers
+        - log
+    DataTableFormCreate:
+      title: DataTableFormCreate
+      type: object
+      properties:
+        table:
+          type: string
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+            required:
+              - name
+      required:
+        - table
+        - headers
+    DataTableFormUpdate:
+      title: DataTableFormUpdate
+      type: object
+      properties:
+        table:
+          type: string
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              name:
+                type: string
+            required:
+              - id
+              - name
+      required:
+        - table
+        - headers
+    SchemaTable:
+      title: SchemaTable
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+          description: id de la table
+        table:
+          type: string
+        fact:
+          type: boolean
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: id de la colonne
+                example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+              name:
+                type: string
+              pk:
+                type: boolean
+                description: Si la colonne est une clé primaire
+              fk:
+                type: object
+                nullable: true
+                properties:
+                  table:
+                    type: string
+                    description: id de la table référencée
+                    example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  field:
+                    type: string
+                    description: id de la colonne référencée
+                    example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                required:
+                  - table
+                  - field
+            required:
+              - id
+              - name
+              - pk
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+        coord:
+          type: object
+          required:
+            - x
+            - 'y'
+          properties:
+            x:
+              type: number
+            'y':
+              type: number
+      required:
+        - id
+        - table
+        - fact
+        - headers
+        - log
+        - coord
+    SchemaTableForm:
+      title: SchemaTableForm
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+          description: id de la table
+        fact:
+          type: boolean
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                description: id de la colonne
+              pk:
+                type: boolean
+                description: Si la colonne est une clé primaire
+              fk:
+                type: object
+                nullable: true
+                properties:
+                  table:
+                    type: string
+                    description: id de la table référencée
+                    example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                  field:
+                    type: string
+                    description: id de la colonne référencée
+                    example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+                required:
+                  - table
+                  - field
+            required:
+              - id
+              - pk
+        coord:
+          type: object
+          required:
+            - x
+            - 'y'
+          properties:
+            x:
+              type: number
+            'y':
+              type: number
+      required:
+        - id
+        - fact
+        - headers
+        - coord
+    Data:
+      title: Data
+      type: object
+      x-examples:
+        Example 1:
+          id: 01BX5ZZKBKACTAV9WEVGEMMVRY
+          values:
+            field1: ''
+            field2: 0
+            field3: 0
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        values:
+          type: object
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+      required:
+        - id
+        - values
+        - log
+    DataForm:
+      title: DataForm
+      type: object
+      x-examples:
+        Example 1:
+          field1: ''
+          field2: 0
+          field3: 0
+    View:
+      title: View
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        log:
+          $ref: '#/components/schemas/HistoryLog'
+        chart:
+          type: string
+          description: BAR | RADAR | PIE
+          nullable: true
+        label:
+          type: object
+          required:
+            - table
+            - field
+          properties:
+            table:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            field:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        data:
+          type: object
+          nullable: true
+          properties:
+            table:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            field:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            pkValue:
+              type: string
+              description: (déprécié) limite les résultats à la valeur de la clé primaire spécifiée
+              deprecated: true
+              nullable: true
+            value:
+              type: string
+              description: (optionnel) limite les résultats à la valeur spécifiée pour la colonne des données
+              example: Menuiserie
+              nullable: true
+          required:
+            - table
+            - field
+      required:
+        - id
+        - log
+        - label
+    ViewForm:
+      title: ViewForm
+      type: object
+      properties:
+        chart:
+          type: string
+          description: BAR | RADAR | PIE
+          nullable: true
+        label:
+          type: object
+          required:
+            - table
+            - field
+          properties:
+            table:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            field:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+        data:
+          type: object
+          nullable: true
+          properties:
+            table:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            field:
+              type: string
+              example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+            pkValue:
+              type: string
+              example: '0'
+              description: (déprécié) limite les résultats à la valeur de la clé primaire spécifiée
+              deprecated: true
+              nullable: true
+            value:
+              type: string
+              example: Menuiserie
+              description: (optionnel) limite les résultats à la valeur spécifiée pour la colonne des données
+              nullable: true
+          required:
+            - table
+            - field
+      required:
+        - label
+    Chart:
+      title: Chart
+      type: object
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+        datasets:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              data:
+                type: array
+                items:
+                  type: number
+            required:
+              - label
+              - data
+      required:
+        - labels
+        - datasets
+      x-examples: {}
+      description: ''
+    ErrorForm:
+      title: ErrorForm
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        path:
+          type: string
+          example: /api/endpoint
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: name
+              message:
+                type: string
+                example: required
+            required:
+              - field
+              - message
+      required:
+        - status
+        - path
+        - errors
+    ErrorConflict:
+      title: ErrorConflict
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 409
+        path:
+          type: string
+          example: /api/endpoint
+        error:
+          type: string
+          example: Data already exists
+      required:
+        - status
+        - path
+        - error
+    ErrorUnauthorized:
+      title: ErrorUnauthorized
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        path:
+          type: string
+          example: /api/endpoint
+        error:
+          type: string
+          example: Unauthorized
+      required:
+        - status
+        - path
+        - error
+    ErrorForbidden:
+      title: ErrorForbidden
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 403
+        path:
+          type: string
+          example: /api/endpoint
+        error:
+          type: string
+          example: Forbidden
+      required:
+        - status
+        - path
+        - error
+    Created:
+      title: Created
+      type: object
+      properties:
+        id:
+          type: string
+          example: 01BX5ZZKBKACTAV9WEVGEMMVRY
+      required:
+        - id
+    HistoryLog:
+      title: HistoryLog
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          format: email
+        updatedBy:
+          type: string
+          format: email
+      required:
+        - createdAt
+        - updatedAt
+        - createdBy
+        - updatedBy
+  securitySchemes:
+    ADMIN:
+      type: http
+      scheme: bearer
+      description: ''
+    USER:
+      type: http
+      scheme: bearer
+  requestBodies: {}

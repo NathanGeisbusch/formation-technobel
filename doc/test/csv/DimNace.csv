@@ -1,0 +1,29 @@
+SKNace,CodeNace,SousSecteur,CoefficientNace,Date
+1,2100,Sylviculture,1,2021
+2,2200,Sylviculture,1,2021
+3,2400,Sylviculture,1,2021
+4,16100,Travail Bois,1,2021
+5,16210,Travail Bois,1,2021
+6,16220,Travail Bois,1,2021
+7,16230,Travail Bois,1,2021
+8,16240,Travail Bois,1,2021
+9,16291,Travail Bois,1,2021
+10,17110,Papier Carton,1,2021
+11,17120,Papier Carton,1,2021
+12,31010,Meuble,1,2021
+13,31020,Meuble,1,2021
+14,31091,Meuble,1,2021
+15,31092,Meuble,1,2021
+16,31099,Meuble,1,2021
+17,43320,Menuiserie,0.75,2021
+18,43332,Menuiserie,1,2021
+19,46130,Commerce Gros,0.16,2021
+20,46150,Commerce Gros,0.1,2021
+21,46732,Commerce Gros,1,2021
+22,47522,Commerce Detail,1,2021
+23,47524,Commerce Detail,1,2021
+24,47591,Commerce Detail,1,2021
+25,16292,Divers,0.5,2021
+26,32200,Divers,0.4,2021
+27,32400,Divers,0.1,2021
+28,32910,Divers,1,2021
