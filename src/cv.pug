@@ -3,7 +3,7 @@ html(lang="fr")
 	head
 		meta(charset="UTF-8")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		title CV
+		title cv
 		style !{CSS}
 		- const age = new Date(new Date()-new Date('1997-08-21')).getFullYear()-1970;
 	body
@@ -15,8 +15,8 @@ html(lang="fr")
 					.poste Développeur informatique
 				.links
 					.link.linkedin
-						a(href="https://www.linkedin.com/in/nathan-geisbusch-8a101").
-							https://linkedin.com/in/nathan-geisbusch-8a101
+						a(href="https://www.linkedin.com/in/nathan-geisbusch").
+							https://linkedin.com/in/nathan-geisbusch
 						svg-container
 							include ./svg/linkedin.svg
 					.link.github
@@ -72,9 +72,14 @@ html(lang="fr")
 					section.hobbies
 						.title Centres d'intérêt
 						.items
-							svg-container(style="align-items: flex-start;margin-top: 4px;")
+							svg-container(style="align-items:flex-start;margin-top:2px;")
 								include ./svg/softskills/coding.svg
-							span Programmation
+							div
+								span Programmation
+								ul(style="margin:5px 0 0;padding-left:0px;list-style-type:none;")
+									li - Nouveaux langages
+									li - Bonnes pratiques
+									li - Apprentissage continu
 							svg-container
 								include ./svg/softskills/forest.svg
 							span Promenade en forêt
@@ -87,7 +92,7 @@ html(lang="fr")
 							.skills-category Back-end:
 							.skills-list Java, Kotlin, Spring, Hibernate, JUnit
 							.skills-category Autres langages:
-							.skills-list C, C#, Python, Go, Nim, Zig
+							.skills-list C, C#, Python
 							.skills-category Bases de donnée:
 							.skills-list PostgreSQL, SQLite, MongoDB
 							.skills-category Outils:
