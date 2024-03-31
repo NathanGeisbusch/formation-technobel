@@ -12,9 +12,11 @@ Vous trouverez ici les différents exercices et projets que j'ai réalisés dans
 
 📚 &nbsp; [Gestionnaire de bibliothèque](https://github.com/NathanGeisbusch/formation-technobel/tree/bibliotheque)
 
+☕ &nbsp; [Code Java pour convertir un objet en JSON](https://github.com/NathanGeisbusch/formation-technobel/tree/json)
+
 🌐 &nbsp; [REST API en Spring Kotlin](https://github.com/NathanGeisbusch/formation-technobel/tree/playzone-backend)
 
-☕ &nbsp; [Code Java pour convertir un objet en JSON](https://github.com/NathanGeisbusch/formation-technobel/tree/json)
+📄 &nbsp; [Parse Master (générateur de code)](https://github.com/NathanGeisbusch/formation-technobel/tree/parse-master)
 
 ## HTML
 
