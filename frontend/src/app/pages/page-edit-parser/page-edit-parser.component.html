@@ -1,0 +1,60 @@
+@if(package) {
+  <div class="card">
+    <p-toolbar styleClass="flex-column md:flex-row p-3 md:pt-1 md:pb-1">
+      <div class="p-toolbar-group-start">
+        <b class="package-name">{{package.info.name}}</b>
+      </div>
+      <div class="p-toolbar-group-end mt-2 md:mt-0 gap-2 flex-column md:flex-row">
+        <p-dropdown [maxlength]="13" [options]="package.versions" [editable]="true"
+                    class="mono p-inputtext-sm w-12rem" styleClass="w-full"
+                    [(ngModel)]="selectedVersion" (onChange)="onChangeVersion($event)"/>
+        <p-splitButton label="Save" icon="pi pi-save" styleClass="p-button-sm pb-0 md:p-2 no-focus"
+                       appendTo="body" [model]="actions" (onClick)="save()"/>
+      </div>
+    </p-toolbar>
+  </div>
+
+  <div class="card flex-grow-1 overflow-auto">
+    <p-tabView styleClass="tabview-custom">
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-info-circle"></i>
+          <span>Information</span>
+        </ng-template>
+        <app-form-edit-parser #form [id]="id" (parser)="parser = $event"/>
+      </p-tabPanel>
+
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-file-import"></i>
+          <span>Parser</span>
+        </ng-template>
+        <app-editor-parser #parserEditor [parser]="parser" [content]="package.parser"/>
+      </p-tabPanel>
+
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-file-import"></i>
+          <span>Builder</span>
+        </ng-template>
+        <app-editor-builder #builderEditor [parser]="parser" [content]="package.builder"/>
+      </p-tabPanel>
+
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-book"></i>
+          <span>Doc</span>
+        </ng-template>
+        <app-editor-doc #docEditor [content]="package.doc"/>
+      </p-tabPanel>
+
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-box"></i>
+          <span>Test</span>
+        </ng-template>
+        <app-editor-input-parser [data]="data"/>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+}

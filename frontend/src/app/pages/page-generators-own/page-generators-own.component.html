@@ -1,0 +1,13 @@
+<app-table-packages [menuItems]="menuItems" [bookmarkView]="false"
+                    [amountLabel]="amountLabel" [data]="data"
+                    [buildTryUrl]="buildTryUrl" [buildEditUrl]="buildEditUrl"
+                    (search)="onSearch($event)" (add)="onAdd()"
+                    (delete)="onDelete($event)" (bulkDelete)="onBulkDelete($event)"
+                    (openMenu)="onMenuOpen($event)" (closeMenu)="onMenuClose()"/>
+<app-dialog-create-generator *ngIf="showDialogCreateGenerator"
+                             [(visible)]="showDialogCreateGenerator"
+                             (save)="reloadData()"/>
+<app-dialog-create-copy-generator *ngIf="showDialogCreateCopyGenerator && selectedGenerator"
+                                  [(visible)]="showDialogCreateCopyGenerator"
+                                  [fromGenerator]="selectedGenerator"
+                                  (save)="reloadData()"/>

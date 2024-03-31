@@ -1,0 +1,8 @@
+<form [formGroup]="form" class="w-16rem sm:w-24rem flex flex-column gap-3_5 p-5">
+  <div class="flex flex-column gap-2">
+    <label for="name">Name</label>
+    <input pInputText id="name" formControlName="name" maxlength="64"
+           [ngClass]="form.get('name')!.invalid && showInvalid ? invalidClass : undefined"/>
+    <app-message *ngIf="errorMessage" [message]="errorMessage" [showIcon]="true"/>
+  </div>
+</form>

@@ -1,0 +1,42 @@
+<div class="flex flex-column gap-4 p-4">
+  <p-panel header="Welcome to ParseMaster">
+    <p>Welcome to ParseMaster, the platform where you can unleash your creativity by coding your own parser and text generator using our innovative syntax!</p>
+    <p>Whether you're generating code or performing computations on a set of data, ParseMaster is here to help you simplify the process.</p>
+  </p-panel>
+
+  <p-panel header="Key Features">
+    <h3><i class="pi pi-book mr-2"></i>Simple Syntax</h3>
+    <p>Our innovative syntax makes coding parsers and text generators intuitive and maintainable.</p>
+    <h3><i class="pi pi-box mr-2"></i>Sandbox</h3>
+    <p>We designed our code interpreter to be entirely safe and sandboxed.</p>
+    <h3><i class="pi pi-users mr-2"></i>Collaboration</h3>
+    <p>Share your creations with others, collaborate, and learn from a vibrant community.</p>
+  </p-panel>
+
+  <p-panel header="Get Started">
+    <div class="flex flex-column gap-3">
+      <div>
+        <p>Explore parsers and generators shared by other users:</p>
+        <div class="flex flex-row gap-3">
+          <a pButton label="Browse parsers" icon="pi pi-search" routerLink="/parsers"></a>
+          <a pButton label="Browse generators" icon="pi pi-search" routerLink="/generators"></a>
+        </div>
+      </div>
+      <div>
+        <p>Start creating your own parsers and generators now!</p>
+        @if(user) {
+          <button pButton label="Create a new generator" icon="pi pi-plus"
+                  (click)="showDialogCreateGenerator = true"></button>
+        } @else {
+          <div class="flex flex-row gap-3">
+            <button pButton label="Sign in" (click)="signIn()" icon="pi pi-user"></button>
+            <button pButton label="Sign up" (click)="signUp()" icon="pi pi-user-plus"></button>
+          </div>
+        }
+      </div>
+    </div>
+  </p-panel>
+</div>
+
+<app-dialog-create-generator *ngIf="showDialogCreateGenerator"
+                             [(visible)]="showDialogCreateGenerator"/>

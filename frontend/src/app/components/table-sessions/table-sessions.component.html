@@ -1,0 +1,59 @@
+<p-table [value]="pageData.data" [rows]="pageData.size" [pageLinks]="pageLinks"
+         [totalRecords]="pageData.pages*pageData.size" [first]="pageData.page*pageData.size"
+         [sortField]="sortField" [sortOrder]="sortOrder" [loading]="isLoading"
+         (onLazyLoad)="onPaginationChanged($event)" (onSort)="onSortChange($event)"
+         (selectionChange)="onSelection($event)"
+         [paginator]="true" [lazy]="true" class="fill-height wrap-pagination">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="w-4rem"><p-tableHeaderCheckbox #tableHeaderCheckbox/></th>
+      <th pSortableColumn="name" style="width:35%">
+        <div class="flex flex-row align-items-center">
+          <div>Name <p-sortIcon field="name"/></div>
+          <p-columnFilter field="name" display="menu"
+                          [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                          [showApplyButton]="false" [showClearButton]="false">
+            <ng-template pTemplate="filter">
+              <span class="p-input-icon-left p-input-icon-right w-full lg:w-auto">
+                <i class="pi pi-search"></i>
+                <input type="search" pInputText placeholder="Search" class="w-full lg:w-20rem"
+                       [value]="searchForm.search" (change)="onSearchChange($event)"/>
+                <i class="pi pi-times-circle cursor-pointer" (click)="onSearchClear()"></i>
+              </span>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="width:35%">
+        <div class="flex flex-row align-items-center">
+          <div>Generator</div>
+        </div>
+      </th>
+      <th pSortableColumn="updatedAt" style="width:15%">Last update <p-sortIcon field="updatedAt"/></th>
+      <th style="width:15%" class="text-center">Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-data>
+    <tr>
+      <td><p-tableCheckbox [value]="data" class="fix-sticky"/></td>
+      <td>{{data.name}}</td>
+      <td class="no-wrap">{{data.generator}}</td>
+      <td>{{data.updatedAt|timeAgo}}</td>
+      <td class="text-center flex flex-row gap-2 align-items-center justify-content-center flex-wrap">
+        <p-button icon="pi pi-file-edit" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  [routerLink]="buildEditUrl(data)"/>
+        <p-button icon="pi pi-trash" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  (click)="onDelete(data)"/>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorleft">
+    <p-button icon="pi pi-trash" styleClass="no-focus" [rounded]="true" [text]="true"
+              (onClick)="onDelete()"/>
+  </ng-template>
+</p-table>

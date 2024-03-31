@@ -1,0 +1,14 @@
+:main
+set %result 0
+has %input "values" = $test
+if $test :if_calc
+fopen "result.txt" = $file
+fwrite $file %result
+
+:if_calc
+get %input "values" = $values
+loop $values :loop_add
+
+:loop_add $i $values
+get $values $i = $value
+add %result $value = %result

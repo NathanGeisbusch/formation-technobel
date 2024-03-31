@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  mail:
+    host: localhost
+    port: 1025
+    username: support@parsemaster.be
+    password: parsemaster
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+          debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+            required: false
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl

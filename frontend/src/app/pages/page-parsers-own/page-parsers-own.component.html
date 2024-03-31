@@ -1,0 +1,17 @@
+<app-table-packages [menuItems]="menuItems" [bookmarkView]="false"
+                    [amountLabel]="amountLabel" [data]="data"
+                    [buildTryUrl]="buildTryUrl" [buildEditUrl]="buildEditUrl"
+                    (search)="onSearch($event)" (add)="onAdd()"
+                    (delete)="onDelete($event)" (bulkDelete)="onBulkDelete($event)"
+                    (openMenu)="onMenuOpen($event)" (closeMenu)="onMenuClose()"/>
+<app-dialog-create-parser *ngIf="showDialogCreateParser"
+                          [(visible)]="showDialogCreateParser"
+                          (save)="reloadData()"/>
+<app-dialog-create-copy-parser *ngIf="showDialogCreateCopyParser && selectedParser"
+                               [(visible)]="showDialogCreateCopyParser"
+                               [fromParser]="selectedParser"
+                               (save)="reloadData()"/>
+<app-dialog-create-generator *ngIf="showDialogCreateGenerator && selectedParser"
+                             [(visible)]="showDialogCreateGenerator"
+                             [fromParser]="selectedParser"
+                             (save)="reloadData()"/>

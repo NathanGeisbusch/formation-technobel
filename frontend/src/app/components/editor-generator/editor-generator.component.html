@@ -1,0 +1,27 @@
+<div class="flex flex-row h-full">
+  <p-splitter [panelSizes]="[60,40]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+              [class]="{'splitter-view': true, 'hide-right-panels': !isDocVisible}">
+    <ng-template pTemplate>
+      <p-splitter [panelSizes]="[70,30]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+                  [class]="{'hide-right-panels': !isFunctionsVisible}">
+        <ng-template pTemplate>
+          <app-code-editor #editor [linter]="linter.bind(this)"/>
+        </ng-template>
+        <ng-template pTemplate>
+          <p-tree class="hide-icon hide-select hide-empty h-full w-full"
+                  [value]="functions" selectionMode="single"
+                  (selectionChange)="onSelectFunction($event)"/>
+        </ng-template>
+      </p-splitter>
+    </ng-template>
+    <ng-template pTemplate>
+      <div [innerHTML]="doc" class="doc px-4 overflow-auto w-full"></div>
+    </ng-template>
+  </p-splitter>
+  <div class="card flex flex-column gap-2 align-items-center">
+    <p-button icon="pi pi-question-circle" [rounded]="true" [text]="true"
+              styleClass="no-focus" (click)="toggleDoc()"/>
+    <p-button icon="pi pi-list" [rounded]="true" [text]="true"
+              styleClass="no-focus" (click)="toggleFunctionsIndex()"/>
+  </div>
+</div>

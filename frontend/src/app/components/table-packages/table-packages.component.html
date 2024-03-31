@@ -1,0 +1,114 @@
+<p-table [value]="pageData.data" [rows]="pageData.size" [pageLinks]="pageLinks"
+         [totalRecords]="pageData.pages*pageData.size" [first]="pageData.page*pageData.size"
+         [sortField]="sortField" [sortOrder]="sortOrder" [loading]="isLoading"
+         (onLazyLoad)="onPaginationChanged($event)" (onSort)="onSortChange($event)"
+         (selectionChange)="onSelection($event)"
+         [paginator]="true" [lazy]="true" class="fill-height wrap-pagination">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="w-4rem"><p-tableHeaderCheckbox #tableHeaderCheckbox/></th>
+      <th pSortableColumn="name" style="width:30%">
+        <div class="flex flex-row align-items-center">
+          <div>Name <p-sortIcon field="name"/></div>
+          <p-columnFilter field="name" display="menu"
+                          [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                          [showApplyButton]="false" [showClearButton]="false">
+            <ng-template pTemplate="filter">
+              <span class="p-input-icon-left p-input-icon-right w-full lg:w-auto">
+                <i class="pi pi-search"></i>
+                <input type="search" pInputText placeholder="Search" class="w-full lg:w-20rem"
+                       [value]="searchForm.search" (change)="onSearchChange($event)"/>
+                <i class="pi pi-times-circle cursor-pointer" (click)="onSearchClear()"></i>
+              </span>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th pSortableColumn="version" style="width:15%">
+        <div class="flex flex-row align-items-center">
+          <div>Version <p-sortIcon field="version"/></div>
+          <p-columnFilter field="version" display="menu" matchMode="in"
+                          [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                          [showApplyButton]="false" [showClearButton]="false">
+            <ng-template pTemplate="filter">
+              <p-checkbox [label]="versionFilter.label" [binary]="true"
+                          [(ngModel)]="searchForm.allVersions"
+                          (onChange)="onFilterVersion($event)"/>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="width:15%">
+        <div class="flex flex-row align-items-center">
+          <div>Visibility</div>
+          <p-columnFilter field="visibility" display="menu" matchMode="in"
+                          [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                          [showApplyButton]="false" [showClearButton]="false">
+            <ng-template pTemplate="filter">
+              <div class="flex flex-column gap-2">
+                <ng-container *ngFor="let filter of visibilityFilters">
+                  <p-radioButton [disabled]="!searchForm.allVersions"
+                                 [label]="filter.label" [value]="filter.value"
+                                 [(ngModel)]="searchForm.visibility"
+                                 (onClick)="onFilterVisibility($event)"/>
+                </ng-container>
+              </div>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th pSortableColumn="updatedAt" style="width:15%">Last update <p-sortIcon field="updatedAt"/></th>
+      <th style="width:25%" class="text-center">Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-data>
+    <tr>
+      <td><p-tableCheckbox [value]="data" class="fix-sticky"/></td>
+      <td>{{data.name}}</td>
+      <td class="mono">{{data.version}}</td>
+      <td>{{data.visibility|titlecase}}</td>
+      <td>{{data.updatedAt|timeAgo}}</td>
+      <td class="text-center flex flex-row gap-2 align-items-center justify-content-center flex-wrap">
+        <p-button icon="pi pi-info-circle" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  (onClick)="sidebarData = data"/>
+        <p-button icon="pi pi-file-edit" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  [routerLink]="buildEditUrl(data)"/>
+        <p-button icon="pi pi-file-export" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  (click)="onMenuOpen($event, data)"/>
+        <p-button icon="pi pi-trash" styleClass="no-focus fix-sticky"
+                  [rounded]="true" [text]="true"
+                  (click)="onDelete(data)"/>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorleft">
+    <p-button icon="pi pi-plus" styleClass="no-focus" [rounded]="true" [text]="true"
+              (onClick)="onAdd()"/>
+    <p-button icon="pi pi-trash" styleClass="no-focus" [rounded]="true" [text]="true"
+              (onClick)="onDelete()"/>
+  </ng-template>
+</p-table>
+
+<p-sidebar [visible]="!!sidebarData" styleClass="w-full md:w-30rem" position="left"
+           (visibleChange)="onSidebarVisibility($event)">
+  <div *ngIf="!!sidebarData" class="flex flex-column align-items-start gap-3 flex-grow-1 p-2">
+    <div class="flex flex-row align-items-center gap-3">
+      <div class="text-2xl font-bold text-900 wrap">{{ sidebarData.name }}</div>
+      <span class="label-sm pt-1 mono">{{sidebarData.version}}</span>
+    </div>
+    <div class="flex align-items-center gap-2 my-2" style="max-width: 75rem;">
+      <div class="wrap">{{sidebarData.description}}</div>
+    </div>
+    <div class="flex flex-column gap-2">
+      <span class="label-sm">{{'Updated '+(sidebarData.updatedAt | timeAgo)}}</span>
+    </div>
+  </div>
+</p-sidebar>
+
+<p-menu #menuCopy [model]="menuItems" [popup]="true" (close)="onMenuClose()"/>

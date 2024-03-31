@@ -1,0 +1,31 @@
+# Class generator
+
+Example:
+```
+# package be.technobel.makerhub
+
+enum order_status finished,ongoing,cancelled
+
+class customer
+id i64
+first_name str
+last_name str
+
+class product
+id i64
+name str
+price f64
+
+class order
+id i64
+status order_status
+date dt
+products page:product
+
+class page t
+data list:t
+elements i64
+pages i32
+page i32
+size i32
+```

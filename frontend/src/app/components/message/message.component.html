@@ -1,0 +1,6 @@
+<div *ngIf="message" class="p-messages p-component">
+  <div [ngClass]="'p-message p-message-wrapper ' + messageSeverityClass">
+    <span *ngIf="showIcon" [ngClass]="messageIconClass"></span>
+    <span [ngClass]="'p-message-' + message.severity">{{ message.detail }}</span>
+  </div>
+</div>

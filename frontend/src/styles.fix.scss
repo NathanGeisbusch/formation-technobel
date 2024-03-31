@@ -1,0 +1,472 @@
+// Theme
+body.theme-light {
+  .p-toolbar-group-start, .p-toolbar-group-end {
+    color: #374151;
+  }
+  .package-name {
+    color: #475161;
+    font-weight: 700;
+  }
+  .bg-panel, .p-splitter-panel {
+    background: #ffffff;
+  }
+  app-svg-icon {
+    background-color: #3B82F6;
+  }
+}
+body.theme-dark {
+  .p-toolbar-group-start, .p-toolbar-group-end, .package-name {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .package-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+  }
+  .bg-panel, .p-splitter-panel {
+    background: #1f2937;
+  }
+  app-svg-icon {
+    background-color: #60a5fa;
+  }
+  .p-tabview-nav {
+    background: #1f2937;
+  }
+  .p-datatable .p-sortable-column.p-highlight,
+  .p-datatable .p-sortable-column:not(.p-highlight):hover{
+    background: #1f2937 !important;
+  }
+
+}
+
+// Fix: maximize height of codemirror editor
+app-code-editor {
+  >div {
+    height: 100%;
+    width: 100%;
+    .cm-editor {
+      height: 100%;
+      width: 100%;
+      outline: none !important;
+      overflow: auto;
+    }
+  }
+}
+
+// Fix: red shadow when focus invalid input
+input.ng-dirty.ng-invalid:focus {
+  box-shadow: 0 0 4px 1px #e24c4c;
+}
+
+// Fix: disable button focus by using the class "no-focus"
+.p-splitbutton.no-focus .p-button, .p-button.no-focus {
+  box-shadow: none !important;
+}
+
+// Fix: inherit width/height to avoid making the text disappear on p-button-sm
+.p-button-sm {
+  height: inherit !important;
+  width: inherit !important;
+}
+
+// Fix: borders of dropdown and button size in input group
+p-inputgroup .p-dropdown {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.p-inputgroup > button.p-button-sm {
+  padding: 0 0.75rem;
+}
+
+// Fix: link as a button
+a.p-button {
+  text-decoration: none;
+  display: flex;
+  font-size: 1rem;
+  :after {
+    display: none;
+  }
+  &.pi-play:before {
+    margin-left: .125rem;
+  }
+}
+
+// Fix: size of small buttons and centering of icons
+.p-button-sm {
+  height: 0;
+  width: 0;
+  padding: .75rem;
+}
+.p-button .pi-thumbs-up,
+.p-button .pi-thumbs-up-fill {
+  margin-top: -.125rem;
+}
+.p-button .pi-play {
+  margin-left: .125rem;
+}
+
+// Fix: remove left radius from by using the class "input-group"
+.p-button.input-group {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 100% !important;
+}
+
+// Fix: remove padding of dropdown items
+.p-dropdown-items, .p-tieredmenu-overlay {
+  padding: 0;
+}
+
+// Fix: maximize splitter height
+p-splitter {
+  .p-splitter {
+    border-radius: 0 !important;
+  }
+  .p-splitter-panel {
+    overflow: auto;
+  }
+  .p-splitter-horizontal {
+    height: 100%;
+    width: 100%;
+  }
+  .p-splitter-vertical {
+    width: 100%;
+  }
+  //overflow: unset;
+  &.hide-right-panels > .p-splitter > :not(:first-child) {
+    display: none;
+  }
+  &.hide-second-panel > .p-splitter > :nth-child(2),
+  &.hide-second-panel > .p-splitter > :nth-child(3) {
+    display: none;
+  }
+  &.hide-third-panel > .p-splitter > :nth-child(4),
+  &.hide-third-panel > .p-splitter > :nth-child(5) {
+    display: none;
+  }
+  .p-splitter > :first-child {
+    z-index: 0;
+  }
+  .p-splitter > :nth-child(2),
+  .p-splitter > :nth-child(3) {
+    z-index: 1;
+  }
+  .p-splitter > :nth-child(4),
+  .p-splitter > :nth-child(5) {
+    z-index: 2;
+  }
+}
+
+// Fix: show splitter gutter on its entire length
+.p-splitter-horizontal > .p-splitter-gutter > .p-splitter-gutter-handle {
+  height: 100%;
+}
+.p-splitter-vertical > .p-splitter-gutter > .p-splitter-gutter-handle {
+  width: 100%;
+}
+
+// Fix: disable border radius from left side of password field when inside a p-inputgroup
+.p-inputgroup > p-password > .p-password.p-inputwrapper {
+  width: 100%;
+  .p-password-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+// Fix: limit the height of a password field in a dialog box to prevent it from being cropped
+p-dialog {
+  .p-password-panel {
+    overflow: auto;
+    max-height: 10rem;
+  }
+}
+
+// Fix: center the title of a dialog by using the class "header-center"
+p-dialog.header-center {
+  .p-dialog-title {
+    width: calc(100% - 3rem);
+    text-align: center;
+    position: absolute;
+  }
+  .p-dialog-header {
+    flex-flow: row-reverse;
+  }
+}
+
+// Fix: center the title of a card by using the class "header-center"
+p-card.header-center {
+  .p-card-title {
+    text-align: center;
+  }
+}
+
+// Fix: body margin in confirm dialog
+.p-confirm-dialog-message:first-child {
+  margin-left: inherit;
+}
+
+// Fix: scrollbar table
+p-table {
+  overflow: hidden !important;
+}
+
+// Fix: expand a table to full height by using the class "fill-height"
+p-table.fill-height {
+  .p-datatable {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .p-datatable-wrapper {
+      flex-grow: 1;
+      overflow: auto;
+    }
+  }
+  thead tr th {
+    position: sticky;
+    top: 0;
+  }
+}
+
+// Fix: disable position, which mess with position:sticky of other elements
+.fix-sticky,
+.fix-sticky .p-checkbox {
+  position: unset;
+}
+
+// Fix: hide empty message by using the class "hide-empty"
+p-tree.hide-empty .p-tree-empty-message {
+  display: none;
+}
+
+// Fix: overlay toolbar on other elements by using the class "overlay-toolbar"
+.overlay-toolbar {
+  position: relative;
+  .p-toolbar {
+    border: 0;
+    margin-bottom: -3rem;
+    z-index: 1;
+    position: absolute;
+    background: transparent;
+  }
+}
+
+// Fix: disable radius in toolbar
+.p-toolbar {
+  border-radius: 0;
+}
+
+// Fix: hide empty filter button bar
+.p-column-filter-buttonbar:empty {
+  display: none;
+}
+
+// Fix: icon padding of filter button
+.p-column-filter-menu-button .p-icon-wrapper {
+  display: inline-flex;
+}
+
+// Fix: show cursor pointer on checkbox label
+p-checkbox {
+  cursor: pointer;
+  label {
+    cursor: pointer;
+  }
+}
+
+// Fix: expand a dataview to full height by using the class "fill-height"
+p-dataview.fill-height {
+  .p-dataview {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .p-dataview-content {
+      flex-grow: 1;
+      overflow: auto;
+    }
+  }
+}
+
+// Fix: avoid position bugs with p-menu inside p-dataview
+.p-dataview {
+  position: unset;
+}
+
+// Fix: disable menu padding
+.p-menu, .p-multiselect-items {
+  padding: 0;
+  white-space: nowrap;
+}
+
+// Fix: border-radius on dropdown items
+.p-submenu-list, .p-menu {
+  border-radius: 6px;
+}
+.p-menu .p-menuitem:first-child > .p-menuitem-content {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.p-menu .p-menuitem:last-child > .p-menuitem-content {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+// Fix: Make menu items text don't wrap
+.p-menuitem-text {
+  white-space: nowrap;
+}
+
+// Fix: tab link gap
+.p-tabview-nav-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+
+// Fix: monospace font in dropdown by using the class "mono"
+p-dropdown.mono {
+  input {
+    font-family: monospace;
+  }
+  .p-dropdown-item {
+    font-family: monospace;
+  }
+}
+
+
+// Fix: remove padding from tab content, maximize height
+.p-tabview {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .p-tabview-panels {
+    flex-grow: 1;
+    padding: 0;
+    overflow: auto;
+    p-tabpanel .p-tabview-panel {
+      height: 100%;
+    }
+  }
+}
+
+// Fix: remove border radius from tab
+.p-tabview-nav-link {
+  border-radius: 0;
+}
+
+// Fix: remove border from tree
+.p-tree {
+  border-radius: 0;
+  border: none !important;
+  .p-tree-wrapper {
+    overflow: unset;
+  }
+}
+
+// Fix: hide icon of tree by using the class "hide-icon"
+p-tree.hide-icon li {
+  height: inherit !important;
+  .p-treenode-content {
+    padding-left: .5rem !important;
+    button {
+      display: none;
+    }
+  }
+}
+
+// Fix: disable overflow in tree
+.p-tree-container {
+  overflow: unset !important;
+}
+
+// Fix: node width in tree
+p-treenode-content {
+  min-width: fit-content;
+}
+
+// Fix: hide selection style in tree
+p-tree.hide-select .p-tree-container .p-treenode .p-treenode-content.p-highlight {
+  background: inherit !important;
+  color: inherit !important;
+}
+
+// Fix: Reduce the size of pagination buttons on small screens to make them fit on one line
+@media (max-width: 960px) {
+  .wrap-pagination {
+    .p-paginator-current {
+      flex-basis: 100%;
+      width: 0;
+      margin: 0 0 -.5rem;
+    }
+    .p-paginator button {
+      min-width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}
+
+// Fix: spinner background and size in table
+.p-datatable-loading-overlay {
+  background-color: transparent !important;
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+
+// Fix: skip sidebar header margin by using the class "skip-header-margin"
+p-sidebar.skip-header-margin .p-sidebar-header {
+  margin-bottom: -4.5rem;
+  width: fit-content;
+  margin-left: auto;
+  z-index: 1;
+}
+
+// Fix: allowing to add menu items to the right of the navbar by using the class "right" on them
+app-navbar {
+  .p-menubar {
+    border-radius: unset;
+  }
+  p-menubar p-menubarsub {
+    width: 100%;
+  }
+  p-menubar .p-menuitem.right {
+    margin-left: auto;
+  }
+  p-menubar .p-menuitem.right + .p-menuitem.right {
+    margin-left: inherit;
+  }
+  p-menubar a.p-menubar-button {
+    order: 3;
+  }
+  p-menubar .p-submenu-list {
+    width: auto;
+    min-width: 12.5rem;
+    padding: 0;
+  }
+  p-menubar .p-menuitem.right .p-submenu-list {
+    right: 0;
+  }
+  @media (min-width: 960px) {
+    p-menubar .p-menuitem.no-padding-left > .p-menuitem-content > a {
+      padding-left: 0;
+    }
+    p-menubar .p-menuitem.icon {
+      a {
+        padding: .5rem;
+      }
+      .p-menuitem-text {
+        display: none;
+      }
+    }
+    p-menubar .p-menuitem.right .p-menuitem-link {
+      display: flex;
+      justify-content: flex-start;
+      flex-flow: row-reverse;
+      gap: .5rem;
+    }
+    p-menubar .p-menuitem.right .p-menuitem-link > * {
+      margin: 0;
+    }
+  }
+}

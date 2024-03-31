@@ -1,0 +1,33 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+          debug: false
+        smtp:
+          auth: true
+          starttls:
+            enable: ${MAIL_TLS}
+            required: ${MAIL_TLS}
+server:
+  port: ${API_PORT}
+  address: 0.0.0.0
+app:
+  data-init: ${DATA_INIT}
+  http-host: ${HTTP_HOST} #example: http://localhost:4200

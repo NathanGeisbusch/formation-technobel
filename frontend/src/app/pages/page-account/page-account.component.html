@@ -1,0 +1,35 @@
+<p-card header="Account" class="header-center">
+  <form class="w-16rem sm:w-24rem px-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p-inputGroup class="mb-3_5">
+      <p-inputGroupAddon>
+        <i class="pi pi-at"></i>
+      </p-inputGroupAddon>
+      <input type="email" id="email" placeholder="Email"
+             [ngClass]="form.get('email')!.invalid && showInvalid ? invalidClass : undefined"
+             pInputText formControlName="email" maxlength="255" required>
+    </p-inputGroup>
+    <p-inputGroup class="mb-3_5">
+      <p-inputGroupAddon>
+        <i class="pi pi-user"></i>
+      </p-inputGroupAddon>
+      <input type="text" id="pseudonym" placeholder="Username"
+             [ngClass]="form.get('pseudonym')!.invalid && showInvalid ? invalidClass : undefined"
+             pInputText formControlName="pseudonym" maxlength="64" required>
+    </p-inputGroup>
+    <p-divider/>
+    <div class="flex flex-column gap-2">
+      <label for="password">Change password</label>
+      <p-inputGroup>
+        <p-inputGroupAddon>
+          <i class="pi pi-key"></i>
+        </p-inputGroupAddon>
+        <p-password inputId="password" [feedback]="false"
+                    [inputStyleClass]="form.get('password')!.invalid && showInvalid ? invalidClass : undefined"
+                    formControlName="password" maxlength="255">
+        </p-password>
+      </p-inputGroup>
+    </div>
+    <p-divider/>
+    <button pButton type="submit" label="Save" class="w-full"></button>
+  </form>
+</p-card>

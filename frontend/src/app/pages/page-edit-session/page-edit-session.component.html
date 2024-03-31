@@ -1,0 +1,36 @@
+@if(package) {
+  <div class="card">
+    <p-toolbar styleClass="flex-column md:flex-row p-3 md:pt-2 md:pb-2">
+      <div class="p-toolbar-group-start">
+        <b class="package-name">{{package.info.name}}</b>
+      </div>
+      <div class="p-toolbar-group-end mt-2 md:mt-0 gap-2 flex-column md:flex-row">
+        <p-button icon="pi pi-save" label="Save"
+                  styleClass="no-focus p-button-sm" (click)="save()"/>
+      </div>
+    </p-toolbar>
+  </div>
+
+  <div class="card flex-grow-1 overflow-auto">
+    <p-tabView styleClass="tabview-custom" [activeIndex]="1">
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-info-circle"></i>
+          <span>Information</span>
+        </ng-template>
+        <app-form-edit-session #form [id]="id"/>
+      </p-tabPanel>
+
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-box"></i>
+          <span>Generator</span>
+        </ng-template>
+        <app-editor-input-generator #inputEditor
+                                    [data]="data"
+                                    [doc]="package.doc"
+                                    [content]="package.input"/>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+}

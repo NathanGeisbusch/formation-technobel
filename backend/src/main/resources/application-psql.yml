@@ -1,0 +1,38 @@
+spring:
+  config:
+    activate:
+      on-profile: psql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ParseMaster
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  mail:
+    host: localhost
+    port: 1025
+    username: support@parsemaster.be
+    password: parsemaster
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+          debug: false
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+            required: false
+server:
+  port: 8000
+  address: 0.0.0.0
+app:
+  data-init: true
+  http-host: http://localhost:4200

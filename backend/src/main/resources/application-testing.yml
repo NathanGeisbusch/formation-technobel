@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: testing
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:Test
+  jpa:
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8001
+app:
+  data-init: false
+  http-host: http://localhost:4200

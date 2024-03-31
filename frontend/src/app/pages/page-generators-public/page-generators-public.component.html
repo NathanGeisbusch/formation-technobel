@@ -1,0 +1,7 @@
+<app-view-packages [menuItems]="menuItems" [bookmarkView]="false"
+                   [amountLabel]="amountLabel" [buildTryUrl]="buildTryUrl"
+                   [loadData]="loadData" [like]="like" [bookmark]="bookmark"
+                   (openMenu)="onMenuOpen($event)" (closeMenu)="onMenuClose()"/>
+<app-dialog-create-copy-generator *ngIf="showDialogCreateCopyGenerator && selectedGenerator"
+                               [(visible)]="showDialogCreateCopyGenerator"
+                               [fromGenerator]="selectedGenerator"/>

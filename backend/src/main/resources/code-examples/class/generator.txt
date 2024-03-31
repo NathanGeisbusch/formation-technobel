@@ -1,0 +1,317 @@
+:main
+#fopen "debug.txt" = %debug
+get %input "enum" = $enums
+get %input "class" = $classes
+# java
+loop $enums :java_loop_enum
+loop $classes :java_loop_class
+# ts enums
+call :ts_enum_path = %path_ts_enum
+call :ts_class_path = %path_ts_class
+concat %path_ts_enum "enums.ts" = %path_ts_enum
+concat %path_ts_class "dto.ts" = %path_ts_class
+loop $enums :ts_loop_enum
+# ts classes
+len $classes = $len
+eq $len 0 = $test
+if $test return
+set $classes_result []
+loop $classes :ts_loop_class $classes_result
+ljoin $classes_result "\n\n" = $classes_result
+fopen %path_ts_class = $file
+fwrite $file $classes_result
+
+:ts_loop_enum $i $enums
+get $enums $i = $enum
+get $enum "name" = $name
+get $enum "values" = $values
+set $new_enum_values []
+loop $values :ts_loop_enum_values $new_enum_values
+_uccase $name = $result_name
+ljoin $new_enum_values ",\n" = $result_values
+concat "export enum " $result_name " {\n" $result_values "\n}" = $file_content
+fopen %path_ts_enum = $file
+fwrite $file $file_content
+
+:ts_loop_enum_values $i $values $new
+get $values $i = $value
+_ucase $value = $name
+concat "  " $name " = \"" $value "\"" = $result
+lpush $new $result
+
+:ts_enum_path
+return "frontend/models/"
+
+:ts_class_path
+return "frontend/models/"
+
+:ts_loop_class $i $classes $classes_result
+get $classes $i = $class
+get $class "name" = $name
+get $class "fields" = $fields
+get $class "generic" = $generics
+_uccase $name = $ucname
+concat $ucname "DTO" = $ucname
+# fields
+set $transform_fields []
+loop $fields :ts_loop_fields $transform_fields $generics
+ljoin $transform_fields ",\n" = $result_body
+# body
+call :class_generic $generics = $result_generic
+concat "export interface " $ucname $result_generic " {\n" $result_body "\n}" = $file_content
+lpush $classes_result $file_content
+
+:ts_loop_fields $i $fields $transform $class_generics
+get $fields $i = $field
+get $field "name" = $name
+get $field "type" = $type
+get $field "generic" = $generics
+_ccase $name = $cname
+call :ts_type $type $class_generics = $result_type
+call :ts_field_generic $generics $class_generics = $result_generic
+concat "  " $cname ": " $result_type $result_generic = $result
+lpush $transform $result
+
+:ts_field_generic $generics $class_generics
+len $generics = $len
+eq $len 0 = $test
+if $test return ""
+set $transform_generics []
+loop $generics :ts_field_generics $transform_generics $class_generics
+ljoin $transform_generics "," = $result_generics
+concat "<" $result_generics ">" = $result
+return $result
+
+:ts_field_generics $i $generics $transform $class_generics
+get $generics $i = $type
+call :ts_type $type $class_generics = $result_type
+lpush $transform $result_type
+
+:ts_type $type $class_generics
+eq $type "str" = $test
+if $test return "string"
+eq $type "f64" = $test
+if $test return "number"
+eq $type "f32" = $test
+if $test return "number"
+eq $type "i64" = $test
+if $test return "number"
+eq $type "i32" = $test
+if $test return "number"
+eq $type "i16" = $test
+if $test return "number"
+eq $type "i8" = $test
+if $test return "number"
+eq $type "list" = $test
+if $test return "Array"
+eq $type "date" = $test
+if $test return "string"
+eq $type "dt" = $test
+if $test return "string"
+lfind $class_generics $type = $index
+ne $index -1 = $test
+if $test :generic_type $type = $result
+if $test return $result
+_uccase $type = $result
+return $result
+
+:java_loop_enum $i $enums
+get $enums $i = $enum
+get $enum "name" = $name
+get $enum "values" = $values
+set $new_enum_values []
+loop $values :java_loop_enum_values $new_enum_values
+_uccase $name = $result_name
+call :java_enum_path = $enum_path
+concat $enum_path $result_name ".java" = $path
+ljoin $new_enum_values ",\n" = $result_values
+call :java_enum_package = $package
+concat $package "public enum " $result_name " {\n" $result_values "\n}" = $file_content
+fopen $path = $file
+fwrite $file $file_content
+
+:java_loop_enum_values $i $values $new
+get $values $i = $value
+_ucase $value = $name
+concat "  " $name = $result
+lpush $new $result
+
+:java_enum_package
+has %input "package" = $test
+not $test = $test
+if $test return ""
+get %input "package" = $package
+concat "package " $package ".enums" ";\n\n" = $result
+return $result
+
+:java_enum_path
+has %input "package" = $test
+not $test = $test
+if $test return "backend/enums/"
+get %input "package" = $package
+replace $package "\\." "/" = $folders
+concat "backend/" $folders "/enums/" = $result
+return $result
+
+:java_loop_class $i $classes
+get $classes $i = $class
+get $class "name" = $name
+get $class "fields" = $fields
+get $class "generic" = $generics
+_uccase $name = $ucname
+concat $ucname "DTO" = $ucname
+call :java_class_path = $class_path
+concat $class_path $ucname ".java" = $path
+# declare
+set $transform_fields []
+loop $fields :java_loop_fields_declare $transform_fields $generics
+ljoin $transform_fields "\n" = $result_declare
+# constructor
+set $transform_fields []
+loop $fields :java_loop_fields_constructor $transform_fields $generics
+ljoin $transform_fields ",\n" = $result_constructor
+concat "\n  public " $ucname "(\n" $result_constructor "\n  ) {" = $result_constructor
+# assign
+set $transform_fields []
+loop $fields :java_loop_fields_assign $transform_fields $generics
+ljoin $transform_fields "\n" = $result_assign
+concat $result_assign "\n  }\n" = $result_assign
+# accessors
+set $transform_fields []
+loop $fields :java_loop_fields_accessors $transform_fields $generics
+ljoin $transform_fields "\n" = $result_accessors
+# body
+concat $result_declare "\n" $result_constructor "\n" $result_assign "\n" $result_accessors = $result_body
+call :java_class_package = $package
+call :class_generic $generics = $result_generic
+concat $package "public class " $ucname $result_generic " {\n" $result_body "}" = $file_content
+fopen $path = $file
+fwrite $file $file_content
+
+:class_generic $generics
+len $generics = $len
+eq $len 0 = $test
+if $test return ""
+set $transform_generics []
+loop $generics :class_generics $transform_generics
+ljoin $transform_generics "," = $result_generics
+concat "<" $result_generics ">" = $result
+return $result
+
+:class_generics $i $generics $transform
+get $generics $i = $type
+_uscase $type = $result
+lpush $transform $result
+
+:java_class_package
+has %input "package" = $test
+not $test = $test
+if $test return ""
+get %input "package" = $package
+concat "package " $package ".dto" ";\n\n" = $result
+return $result
+
+:java_class_path
+has %input "package" = $test
+not $test = $test
+if $test return "backend/dto/"
+get %input "package" = $package
+replace $package "\\." "/" = $folders
+concat "backend/" $folders "/dto/" = $result
+return $result
+
+:java_loop_fields_declare $i $fields $transform $class_generics
+get $fields $i = $field
+get $field "name" = $name
+get $field "type" = $type
+get $field "generic" = $generics
+_ccase $name = $cname
+call :java_type $type $class_generics = $result_type
+call :java_field_generic $generics $class_generics = $result_generic
+concat "  private " $result_type $result_generic " " $cname ";" = $result
+lpush $transform $result
+
+:java_loop_fields_constructor $i $fields $transform $class_generics
+get $fields $i = $field
+get $field "name" = $name
+get $field "type" = $type
+get $field "generic" = $generics
+_ccase $name = $cname
+call :java_type $type $class_generics = $result_type
+call :java_field_generic $generics $class_generics = $result_generic
+concat "    " $result_type $result_generic " " $cname = $result
+lpush $transform $result
+
+:java_loop_fields_assign $i $fields $transform $class_generics
+get $fields $i = $field
+get $field "name" = $name
+get $field "type" = $type
+_ccase $name = $cname
+call :java_type $type $class_generics = $result_type
+concat "    this." $cname " = " $cname ";" = $result
+lpush $transform $result
+
+:java_loop_fields_accessors $i $fields $transform $class_generics
+get $fields $i = $field
+get $field "name" = $name
+get $field "type" = $type
+get $field "generic" = $generics
+_ccase $name = $cname
+_uccase $name = $ucname
+call :java_type $type $class_generics = $result_type
+call :java_field_generic $generics $class_generics = $result_generic
+concat $result_type $result_generic = $result_type
+# getter
+concat "  public " $result_type " get" $ucname "() {\n" = $result
+concat $result "    return this." $cname ";\n  }\n\n" = $result
+# setter
+concat $result "  public void set" $ucname "(" $result_type " " $cname ") {\n" = $result
+concat $result "    this." $cname " = " $cname ";\n  }\n" = $result
+lpush $transform $result
+
+:java_field_generic $generics $class_generics
+len $generics = $len
+eq $len 0 = $test
+if $test return ""
+set $transform_generics []
+loop $generics :java_field_generics $transform_generics $class_generics
+ljoin $transform_generics "," = $result_generics
+concat "<" $result_generics ">" = $result
+return $result
+
+:java_field_generics $i $generics $transform $class_generics
+get $generics $i = $type
+call :java_type $type $class_generics = $result_type
+lpush $transform $result_type
+
+:java_type $type $class_generics
+eq $type "str" = $test
+if $test return "String"
+eq $type "f64" = $test
+if $test return "Double"
+eq $type "f32" = $test
+if $test return "Float"
+eq $type "i64" = $test
+if $test return "Long"
+eq $type "i32" = $test
+if $test return "Integer"
+eq $type "i16" = $test
+if $test return "Short"
+eq $type "i8" = $test
+if $test return "Byte"
+eq $type "list" = $test
+if $test return "List"
+eq $type "date" = $test
+if $test return "LocalDate"
+eq $type "dt" = $test
+if $test return "LocalDateTime"
+lfind $class_generics $type = $index
+ne $index -1 = $test
+if $test :generic_type $type = $result
+if $test return $result
+_uccase $type = $result
+return $result
+
+:generic_type $type
+_uscase $type = $result
+return $result

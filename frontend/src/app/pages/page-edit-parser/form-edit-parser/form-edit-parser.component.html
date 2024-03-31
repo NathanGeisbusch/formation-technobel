@@ -1,0 +1,33 @@
+<form [formGroup]="form" class="w-16rem sm:w-24rem flex flex-column gap-3_5 p-5">
+  <div class="flex flex-column gap-2">
+    <label for="name">Name</label>
+    <input pInputText id="name" formControlName="name" maxlength="64"
+           [ngClass]="form.get('name')!.invalid && showInvalid ? invalidClass : undefined"/>
+    <app-message *ngIf="errorMessage" [message]="errorMessage" [showIcon]="true"/>
+  </div>
+  <div class="flex flex-column gap-2">
+    <label for="desc">Description</label>
+    <textarea pInputText id="desc" formControlName="description" maxlength="255">
+    </textarea>
+  </div>
+  <div class="flex flex-column gap-2">
+    <label>Syntax</label>
+    <p-dropdown formControlName="syntax"
+                [options]="syntaxOptions" [editable]="true" styleClass="w-full"
+                (onChange)="emitParser($event.value)"/>
+  </div>
+  <div class="flex flex-column gap-2">
+    <label>Visibility</label>
+    <p-dropdown formControlName="visibility"
+                [options]="visibilityOptions" [editable]="true" styleClass="w-full"
+                (onChange)="updatePasswordControl()"/>
+  </div>
+  <div class="flex flex-column gap-2">
+    <label for="password">Password</label>
+    <p-inputGroup>
+      <input pInputText id="password" formControlName="password" maxlength="255"/>
+      <p-button icon="pi pi-paperclip" styleClass="no-focus p-button-sm input-group"
+                [disabled]="form.get('password')!.disabled" (click)="copyProtectedUrl()"/>
+    </p-inputGroup>
+  </div>
+</form>

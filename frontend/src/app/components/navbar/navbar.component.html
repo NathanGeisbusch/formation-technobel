@@ -1,0 +1,11 @@
+<p-menubar [model]="navItems" [autoDisplay]="false">
+	<ng-template pTemplate="start">
+		<a routerLink="" class="nav-title">
+			<img ngSrc="/assets/img/pm-logo.svg" width="32" height="32" class="mr-2" alt="logo"/>
+			<b>ParseMaster</b>
+		</a>
+	</ng-template>
+</p-menubar>
+<app-dialog-auth [formType]="formType" (formTypeChange)="onFormTypeChange($event)"/>
+<app-dialog-create-parser *ngIf="showDialogCreateParser" [(visible)]="showDialogCreateParser"/>
+<app-dialog-create-generator *ngIf="showDialogCreateGenerator" [(visible)]="showDialogCreateGenerator"/>

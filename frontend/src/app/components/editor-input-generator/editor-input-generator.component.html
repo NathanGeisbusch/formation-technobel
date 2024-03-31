@@ -1,0 +1,59 @@
+<div class="flex flex-row h-full">
+  <p-splitter [panelSizes]="[60,40]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+              [class]="{'splitter-view': true, 'hide-right-panels': !isDocVisible}">
+    <ng-template pTemplate>
+      <p-splitter [panelSizes]="[70,30]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+                  [class]="{'hide-right-panels': !isResultVisible}">
+        <ng-template pTemplate>
+          <app-code-editor #editor [linter]="linter.bind(this)"/>
+        </ng-template>
+        <ng-template pTemplate>
+          <p-splitter [minSizes]="[5,5]" layout="vertical" [gutterSize]="6">
+            <ng-template pTemplate>
+              <p-tree #resultTree [value]="results" selectionMode="single"
+                      styleClass="p-0 w-full" class="hide-empty h-full w-full"
+                      (selectionChange)="onSelectResult($event)"/>
+            </ng-template>
+            <ng-template pTemplate>
+              <div class="overlay-toolbar flex flex-column w-full">
+                <p-toolbar class="flex flex-row justify-content-end w-full"
+                           styleClass="p-3 md:pt-1 md:pb-1">
+                  <div class="p-toolbar-group-end gap-2 flex-row">
+                    <p-button icon="pi pi-copy" [rounded]="true" [text]="true" styleClass="no-focus"
+                              [disabled]="!selectedFile" (click)="copyFileToClipboard()"/>
+                    <button pButton (click)="zipFiles()" [disabled]="results.length===0"
+                            class="p-button p-button-sm p-button-icon p-button-text p-button-rounded no-focus">
+                      <app-svg-icon path="/assets/img/file-zip.svg"/>
+                    </button>
+                  </div>
+                </p-toolbar>
+                <app-code-editor #previewEditor [readOnly]="true"/>
+              </div>
+            </ng-template>
+          </p-splitter>
+        </ng-template>
+      </p-splitter>
+    </ng-template>
+    <ng-template pTemplate>
+      <div [innerHTML]="doc" class="doc px-4 overflow-auto w-full"></div>
+    </ng-template>
+  </p-splitter>
+  <div class="card flex flex-column gap-2 align-items-center">
+    @if(data) {
+      @if(data.generator.running) {
+        <p-button icon="pi pi-stop-circle" [rounded]="true" [text]="true" [disabled]="!generatorConfig || !inputData"
+                  severity="danger" styleClass="no-focus" (click)="setGeneratorState(false)"/>
+      } @else {
+        <p-button icon="pi pi-play" [rounded]="true" [text]="true"
+                  severity="success" styleClass="no-focus" (click)="setGeneratorState(true)"/>
+      }
+    }
+
+    <p-button icon="pi pi-file" [rounded]="true" [text]="true"
+              styleClass="no-focus" (click)="toggleResult()"/>
+    @if(_doc) {
+      <p-button icon="pi pi-question-circle" [rounded]="true" [text]="true"
+                styleClass="no-focus" (click)="toggleDoc()"/>
+    }
+  </div>
+</div>

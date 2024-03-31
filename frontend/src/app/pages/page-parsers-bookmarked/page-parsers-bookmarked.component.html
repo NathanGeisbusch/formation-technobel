@@ -1,0 +1,10 @@
+<app-view-packages [menuItems]="menuItems" [bookmarkView]="true"
+                   [amountLabel]="amountLabel" [buildTryUrl]="buildTryUrl"
+                   [loadData]="loadData" [like]="like" [bookmark]="bookmark"
+                   (openMenu)="onMenuOpen($event)" (closeMenu)="onMenuClose()"/>
+<app-dialog-create-copy-parser *ngIf="showDialogCreateCopyParser && selectedParser"
+                               [(visible)]="showDialogCreateCopyParser"
+                               [fromParser]="selectedParser"/>
+<app-dialog-create-generator *ngIf="showDialogCreateGenerator && selectedParser"
+                             [(visible)]="showDialogCreateGenerator"
+                             [fromParser]="selectedParser"/>

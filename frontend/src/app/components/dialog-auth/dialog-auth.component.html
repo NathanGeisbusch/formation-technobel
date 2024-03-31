@@ -1,0 +1,15 @@
+<p-dialog class="header-center" [header]="formHeader" [visible]="formType != null"
+          [modal]="true" [closable]="true" [draggable]="false" [dismissableMask]="true"
+          (visibleChange)="onVisibilityChange($event)">
+  @switch(formType) {
+    @case('sign_in') {
+      <app-form-sign-in (formTypeChange)="onFormTypeChange($event)"/>
+    }
+    @case('sign_up') {
+      <app-form-sign-up (formTypeChange)="onFormTypeChange($event)"/>
+    }
+    @case('pw_change') {
+      <app-form-password-change (formTypeChange)="onFormTypeChange($event)"/>
+    }
+  }
+</p-dialog>

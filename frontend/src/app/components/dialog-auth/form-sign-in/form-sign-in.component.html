@@ -1,0 +1,26 @@
+<form class="w-16rem sm:w-24rem px-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <p-inputGroup class="mb-3_5">
+    <p-inputGroupAddon>
+      <i class="pi pi-user"></i>
+    </p-inputGroupAddon>
+    <input type="text" id="login" placeholder="Username"
+           [ngClass]="form.get('login')!.invalid && showInvalid ? invalidClass : undefined"
+           pInputText formControlName="login" maxlength="255" required>
+  </p-inputGroup>
+  <p-inputGroup class="mb-3_5">
+    <p-inputGroupAddon>
+      <i class="pi pi-key"></i>
+    </p-inputGroupAddon>
+    <p-password [toggleMask]="true" [feedback]="false"
+                [inputStyleClass]="form.get('password')!.invalid && showInvalid ? invalidClass : undefined"
+                placeholder="Password" formControlName="password" maxlength="255" required>
+    </p-password>
+  </p-inputGroup>
+  <button pButton type="submit" label="Sign in" class="w-full mb-3_5"></button>
+  <div class="text-center">
+    <p-button label="Forgotten password ?" [link]="true" (click)="passwordChange()"/>
+  </div>
+  <div class="text-center">
+    <p-button label="Create an account" [link]="true" (click)="signUp()"/>
+  </div>
+</form>

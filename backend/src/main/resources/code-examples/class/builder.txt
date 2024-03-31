@@ -1,0 +1,19 @@
+# class
+* "class":[] "enum":[]
+class "class":map[]+ "name":str= "generic":[] "fields":[]
+class_generic "generic":str[]=
+class_ign -
+
+# field
+field_name "fields":map[]+ "name":str= "generic":[]
+field_type "type":str=
+field_generic "generic":str[]=
+field_eol -
+
+# enum
+enum "enum":map[]+ "name":str= "values":[]
+enum_val "values":str[]=
+enum_eol -
+
+# package
+package "package":str=

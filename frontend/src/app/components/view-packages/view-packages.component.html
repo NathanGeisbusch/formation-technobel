@@ -1,0 +1,99 @@
+<p-dataView [value]="data.data" [rows]="data.size" [pageLinks]="pageLinks"
+            [totalRecords]="data.pages*data.size"
+            [first]="data.page*data.size"
+            (onLazyLoad)="onPaginationChanged($event)"
+            [paginator]="true" [lazy]="true" class="fill-height wrap-pagination">
+
+  <ng-template pTemplate="header">
+    <div class="flex flex-column lg:flex-row align-items-center justify-content-between lg:gap-2 gap-3">
+      <div class="flex flex-column lg:flex-row gap-2 lg:gap-4 w-full lg:w-auto">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="search" pInputText placeholder="Search" class="w-full lg:w-20rem"
+                   [value]="searchForm.search" (change)="onSearchChange($event)">
+        </span>
+        <div class="flex flex-row gap-2">
+          <span class="fw-500 flex flex-column justify-content-center pl-1 lg:pl-0">Sort by</span>
+          <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" (onChange)="onSortChange($event)"
+                      styleClass="w-full lg:w-14rem " class="flex-grow-1"/>
+        </div>
+      </div>
+      <div class="fw-500">{{amountLabel(data.elements)}}</div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="list">
+    <div class="grid grid-nogutter">
+      <article *ngFor="let item of data.data; let first = first"
+               [ngClass]="{ 'border-top-1 surface-border': !first }"
+               class="flex flex-row align-items-start p-4 gap-4 w-full">
+        <div class="flex flex-column align-items-start gap-3 flex-grow-1 p-2">
+
+          <!-- name + version -->
+          <div class="flex flex-row align-items-center gap-3">
+            <div class="text-2xl font-bold text-900 wrap">{{ item.name }}</div>
+            <span class="label-sm pt-1 mono">{{item.version}}</span>
+          </div>
+
+          <!-- description -->
+          <div *ngIf="item.description" class="description flex align-items-center gap-2 my-2">
+            <div class="wrap">{{item.description}}</div>
+          </div>
+
+          <!-- date -->
+          <div class="flex flex-column gap-2">
+            <span class="label-sm">{{'Updated '+(item.updatedAt | timeAgo)+' by '+item.author}}</span>
+          </div>
+
+          <!-- actions -->
+          @if(user && item.author !== user.pseudonym) {
+            <div class="flex flex-column sm:flex-row fix-ml sm:gap-2 sm:align-items-center">
+              <div class="flex flex-row gap-2 align-items-center">
+                <a [routerLink]="buildTryUrl(item)"
+                   class="p-button p-button-icon-only p-button-rounded p-button-text pi pi-play"></a>
+                <p-button icon="pi pi-file-export" [rounded]="true" [text]="true" styleClass="no-focus"
+                          (click)="onMenuOpen($event, item)"/>
+                <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                          (onClick)="onBookmark(item)"
+                          [icon]="item.bookmarked ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"/>
+              </div>
+              <div class="flex flex-row gap-2 align-items-center">
+                <div class="flex flex-row">
+                  <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                            (onClick)="onLike(item)"
+                            [icon]="item.liked !== null && item.liked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"/>
+                  <span class="label-sm">{{item.likes.toString()}}</span>
+                </div>
+                <div class="flex flex-row">
+                  <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                            (onClick)="onDislike(item)"
+                            [icon]="item.liked !== null && !item.liked ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"/>
+                  <span class="label-sm">{{item.dislikes.toString()}}</span>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="flex flex-column sm:flex-row fix-ml sm:align-items-center">
+              <div class="flex flex-row gap-2">
+                <a [routerLink]="buildTryUrl(item)"
+                   class="p-button p-button-icon-only p-button-rounded p-button-text pi pi-play"></a>
+              </div>
+              <div class="flex flex-row gap-2 align-items-center">
+                <div class="flex flex-row">
+                  <i class="fix pi pi-thumbs-up w-3rem h-3rem"></i>
+                  <span class="label-sm">{{item.likes.toString()}}</span>
+                </div>
+                <div class="flex flex-row">
+                  <i class="fix pi pi-thumbs-down w-3rem h-3rem"></i>
+                  <span class="label-sm">{{item.dislikes.toString()}}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </article>
+    </div>
+  </ng-template>
+
+</p-dataView>
+<p-menu #menuCopy [model]="menuItems" [popup]="true" (close)="onMenuClose()"/>

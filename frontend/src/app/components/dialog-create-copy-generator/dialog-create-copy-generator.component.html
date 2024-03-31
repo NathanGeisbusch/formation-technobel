@@ -1,0 +1,29 @@
+<p-dialog class="header-center" header="Copy generator" [visible]="visible"
+          [modal]="true" [closable]="true" [draggable]="false" [dismissableMask]="true"
+          (visibleChange)="onVisibilityChange($event)">
+  <form class="w-16rem sm:w-24rem px-4 flex flex-column gap-3_5"
+        [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="flex flex-column gap-2">
+      <label for="generator-name">New name</label>
+      <input pInputText id="generator-name" formControlName="name" maxlength="64"
+             [ngClass]="form.get('name')!.invalid && showInvalid ? invalidClass : undefined"/>
+    </div>
+    <ng-container *ngIf="fromGenerator">
+      <div class="flex flex-column gap-2">
+        <label for="source-name">Source name</label>
+        <input pInputText id="source-name" [value]="fromGenerator.name" disabled/>
+      </div>
+      <div class="flex flex-column gap-2">
+        <label for="source-version">Source version</label>
+        <p-dropdown inputId="source-version" formControlName="sourceVersion" appendTo="body"
+                    optionLabel="value" optionValue="value" [maxlength]="13"
+                    [options]="versions" [editable]="true" styleClass="w-full"
+                    (onChange)="onChangeVersion($event)"/>
+      </div>
+    </ng-container>
+    <app-message *ngIf="errorMessage" [message]="errorMessage" [showIcon]="true"/>
+    <button pButton type="submit" label="Create" class="w-full mt-2"
+            [disabled]="hasAnyFormErrors"></button>
+  </form>
+</p-dialog>
+<p>dialog-create-copy-generator works!</p>

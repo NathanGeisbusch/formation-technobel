@@ -1,0 +1,35 @@
+@if(package) {
+  <div class="card">
+    <p-toolbar [styleClass]="user ?
+      'flex-column md:flex-row p-3 md:pt-2 md:pb-2' :
+      'flex-column md:flex-row p-3'
+    ">
+      <div class="p-toolbar-group-start">
+        <b class="package-name">{{package.info.name}}</b>
+      </div>
+      @if(user) {
+        <div class="p-toolbar-group-end mt-2 md:mt-0 gap-2 flex-column md:flex-row">
+          @if(user.pseudonym !== package.info.author) {
+            <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                      (onClick)="like()"
+                      [icon]="package.info.liked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"/>
+            <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                      (onClick)="dislike()"
+                      [icon]="package.info.liked === false ?
+                      'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"/>
+            <p-button [rounded]="true" [text]="true" styleClass="no-focus"
+                      (onClick)="bookmark()"
+                      [icon]="package.info.bookmarked ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"/>
+          }
+          <p-dropdown [maxlength]="13" [options]="package.versions" [editable]="true"
+                      class="mono p-inputtext-sm w-12rem" styleClass="w-full"
+                      [(ngModel)]="selectedVersion" (onChange)="onChangeVersion($event)"/>
+        </div>
+      }
+    </p-toolbar>
+  </div>
+
+  <div class="bg-panel card flex-grow-1 overflow-auto">
+    <app-editor-input-parser [data]="data" [doc]="package.doc"/>
+  </div>
+}

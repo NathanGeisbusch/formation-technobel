@@ -1,0 +1,14 @@
+.p-message-wrapper {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  .pi {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+}
+.p-message {
+  margin: 0;
+}

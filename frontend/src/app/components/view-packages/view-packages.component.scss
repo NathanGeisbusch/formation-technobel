@@ -1,0 +1,67 @@
+// Expand dataview verticaly
+p-dataview.fill-height {
+  height: 100%;
+  display: block;
+}
+
+// Force long words to wrap (to avoid text showing outside of its bounds)
+.wrap {
+  word-wrap: anywhere;
+}
+
+.fw-500 {
+  font-weight: 500;
+}
+
+// Align the actions buttons on small screens
+.fix-ml {
+  margin-left: -1rem;
+}
+
+// Label used as small text
+.label-sm {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+// Fix icon size and position
+i.pi.fix {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0.375rem;
+  &.pi-thumbs-up, &.pi-thumbs-up-fill {
+    margin-top: -0.125rem;
+  }
+}
+
+.mono {
+  font-family: monospace;
+}
+
+// Center the articles on small screens
+@media (max-width: 575px) {
+  article {
+    flex-flow: column-reverse !important;
+    > div:nth-child(1) {
+      justify-content: center !important;
+      width: 100%;
+      display: flex;
+    }
+    > div:nth-child(2) {
+      align-items: center !important;
+      width: 100%;
+    }
+    .updated-at {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.description {
+  max-width: 75rem;
+  white-space: pre-line;
+}

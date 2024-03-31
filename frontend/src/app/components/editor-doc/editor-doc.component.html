@@ -1,0 +1,16 @@
+<div class="flex flex-row h-full w-full">
+  <p-splitter [panelSizes]="[60,40]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+              [class]="{'splitter-view': true, 'hide-right-panels': !isDocVisible}">
+    <ng-template pTemplate>
+      <app-code-editor #editor [linter]="linter.bind(this)"/>
+    </ng-template>
+    <ng-template pTemplate>
+      <div [innerHTML]="doc" class="doc px-4 overflow-auto w-full"></div>
+    </ng-template>
+  </p-splitter>
+  <div class="card flex flex-column gap-2 align-items-center">
+    <p-button [icon]="isDocVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+              [rounded]="true" [text]="true"
+              styleClass="no-focus" (click)="toggleDoc()"/>
+  </div>
+</div>

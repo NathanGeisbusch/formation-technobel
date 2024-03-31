@@ -1,0 +1,62 @@
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@import 'primeflex/primeflex.scss';
+@import 'styles.fix.scss';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+textarea {
+  resize: none;
+}
+
+// Adjust list padding in doc sidebar
+.doc {
+  ul {
+    padding-inline-start: 2rem;
+    li + li {
+      margin-top: .5rem;
+    }
+    li ul li:first-child {
+      margin-top: .25rem;
+    }
+  }
+}
+
+// PrimeFlex doesn't have intermediate value between 1rem and 1.5rem
+.mb-3_5 {
+  margin-bottom: 1.25rem;
+}
+.mt-3_5 {
+  margin-top: 1.25rem;
+}
+.gap-3_5 {
+  gap: 1.25rem;
+}
+
+// Force long words to wrap (to avoid text showing outside of its bounds)
+.wrap {
+  word-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.no-wrap {
+  white-space: nowrap;
+}
+
+// Custom error gutter
+.ͼ1 .cm-lint-marker-error {
+  content: url(./assets/img/red-gutter.svg);
+}
+
+// Disable highlight active line when read-only
+app-code-editor .read-only {
+  .cm-activeLine, .cm-activeLineGutter {
+    background: transparent;
+  }
+}

@@ -1,0 +1,36 @@
+<div class="flex flex-row h-full">
+  <p-splitter [panelSizes]="[60,40]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+              [class]="{'splitter-view': true, 'hide-right-panels': !isDocVisible}">
+    <ng-template pTemplate>
+      <p-splitter [panelSizes]="[70,30]" [minSizes]="[5,5]" layout="horizontal" [gutterSize]="6"
+                  [class]="{'hide-right-panels': !isResultVisible}">
+        <ng-template pTemplate>
+          <app-code-editor #editor [linter]="linter.bind(this)"/>
+        </ng-template>
+        <ng-template pTemplate>
+          <div class="overlay-toolbar flex flex-column w-full">
+            <p-toolbar class="flex flex-row justify-content-end w-full"
+                       styleClass="p-3 md:pt-1 md:pb-1">
+              <div class="p-toolbar-group-end gap-2 flex-row">
+                <p-button icon="pi pi-copy" [rounded]="true" [text]="true" styleClass="no-focus"
+                          (click)="copyFileToClipboard()"/>
+              </div>
+            </p-toolbar>
+            <app-code-editor #previewEditor [readOnly]="true"/>
+          </div>
+        </ng-template>
+      </p-splitter>
+    </ng-template>
+    <ng-template pTemplate>
+      <div [innerHTML]="doc" class="doc px-4 overflow-auto w-full"></div>
+    </ng-template>
+  </p-splitter>
+  <div class="card flex flex-column gap-2 align-items-center">
+    <p-button icon="pi pi-file" [rounded]="true" [text]="true"
+              styleClass="no-focus" (click)="toggleResult()"/>
+    @if(_doc) {
+      <p-button icon="pi pi-question-circle" [rounded]="true" [text]="true"
+                styleClass="no-focus" (click)="toggleDoc()"/>
+    }
+  </div>
+</div>
