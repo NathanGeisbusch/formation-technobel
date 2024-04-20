@@ -1,0 +1,149 @@
+doctype html
+html(lang="fr")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		title CV
+		style !{CSS}
+		- const age = new Date(new Date()-new Date('1997-08-21')).getFullYear()-1970;
+	body
+		.cv
+			.header
+				.photo
+				.naming
+					.name Nathan Geisbusch
+					.poste Développeur informatique
+				.links
+					.link.linkedin
+						a(href="https://www.linkedin.com/in/nathan-geisbusch-8a101").
+							https://linkedin.com/in/nathan-geisbusch-8a101
+						svg-container
+							include ./svg/linkedin.svg
+					.link.github
+						a(href="https://github.com/NathanGeisbusch").
+							https://github.com/NathanGeisbusch
+						svg-container
+							include ./svg/github.svg
+			.main
+				.left
+					section.contact
+						.title Contact
+						.items
+							svg-container
+								include ./svg/position.svg
+							span B-6717 Thiaumont
+							svg-container
+								include ./svg/phone.svg
+							a(href="tel:+32497507731") +32 497 50 77 31
+							svg-container
+								include ./svg/mail.svg
+							a(href="mailto:nathan.geisbusch@gmail.com").
+								nathan.geisbusch@gmail.com
+					section.info
+						.title Autres informations
+						.items
+							svg-container
+								include ./svg/car.svg
+							span Permis B + voiture
+							svg-container
+								include ./svg/cake.svg
+							span #{age} ans (21/08/1997)
+					section.langues
+						.title Langues
+						.items
+							svg-container
+								include ./svg/flag-fr.svg
+							span Français (Langue maternelle)
+							svg-container
+								include ./svg/flag-gb.svg
+							span Anglais (Lecture, Écriture)
+					section.softskills
+						.title Qualités
+						.items
+							svg-container#rigueur
+								include ./svg/softskills/rigor.svg
+							span Rigueur
+							svg-container#sisyphe
+								include ./svg/softskills/perseverance.svg
+							span Persévérance
+							svg-container
+								include ./svg/softskills/learn.svg
+							span Curiosité intellectuelle
+					section.hobbies
+						.title Centres d'intérêt
+						.items
+							svg-container(style="align-items: flex-start;margin-top: 4px;")
+								include ./svg/softskills/coding.svg
+							span Programmation
+							svg-container
+								include ./svg/softskills/forest.svg
+							span Promenade en forêt
+				.right
+					section.skills
+						.title Compétences
+						.items
+							.skills-category Front-end:
+							.skills-list Angular, HTML, CSS, JS, Pug, Sass, Typescript
+							.skills-category Back-end:
+							.skills-list Java, Kotlin, Spring, Hibernate, JUnit
+							.skills-category Autres langages:
+							.skills-list C, C#, Python
+							.skills-category Bases de donnée:
+							.skills-list PostgreSQL, SQLite, MongoDB
+							.skills-category Outils:
+							.skills-list Docker, Git
+					section.formations
+						.title Formations
+						.experiences
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name Formation - Développeur Java et Angular
+										.xp-place Technobel (Ciney)
+									.xp-date 06/2023 - 03/2024
+								.xp-desc.
+									- Application web permettant la création de syntaxes personnalisées et la génération de fichiers basée sur du texte saisi par l'utilisateur.
+								.xp-desc.
+									- Création d'une REST API en Spring Kotlin pour une application permettant
+									de générer des diagrammes à partir de données importées depuis des csv.
+								.xp-desc.
+									- Création d'un mockup pour un projet d'application mobile
+									destiné à promouvoir une consommation responsable
+									ainsi que la réparation de produits électroniques.
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name Bachelier - Informatique de gestion
+										.xp-place Haute-École Robert Schuman (Libramont)
+									.xp-date 09/2016 - 08/2020
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name CESS - Technicien en informatique
+										.xp-place ITELA (Arlon)
+									.xp-date 09/2015 - 08/2016
+								//-.xp-desc Installation et configuration de serveurs Windows et Linux (DHCP, DNS, Active Directory, VoIP)
+					section.xp-pro
+						.title Expériences professionnelles 
+						.experiences
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name Stage de développeur informatique
+										.xp-place Infodata (Kehlen, Luxembourg)
+									.xp-date 02/2019 - 05/2019
+								.xp-desc.
+									Développement d'une application web en Angular
+									pour la gestion des données internes de l'entreprise
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name Stage dans un magasin d'informatique
+										.xp-place Lux Informatique (Weyler)
+									.xp-date 02/2016 - 03/2016
+							.xp
+								.xp-info
+									.xp-title
+										.xp-name Stage dans un magasin d'informatique
+										.xp-place Multitech (Arlon)
+									.xp-date 02/2015 - 02/2015
