@@ -25,3 +25,5 @@ Vous trouverez ici les différents exercices et projets que j'ai réalisés dans
 🖌️ &nbsp; [Zone de dessin](https://github.com/NathanGeisbusch/formation-technobel/tree/drawing-canvas)
 
 ♻️ &nbsp; [Mockup Beco](https://github.com/NathanGeisbusch/formation-technobel/tree/mockup-beco)
+
+🪪 &nbsp; [CV](https://github.com/NathanGeisbusch/formation-technobel/tree/cv)
