@@ -2,28 +2,20 @@
 
 Vous trouverez ici les différents exercices et projets que j'ai réalisés dans le cadre de ma formation.
 
-## Java
+⚔️ &nbsp; [Heroes vs Monsters](https://github.com/NathanGeisbusch/formation-technobel/tree/heroes_vs_monsters) (Java Lanterna)
 
-⚔️ &nbsp; [Heroes vs Monsters](https://github.com/NathanGeisbusch/formation-technobel/tree/heroes_vs_monsters)
+💼 &nbsp; [Gestionnaire d'employés](https://github.com/NathanGeisbusch/formation-technobel/tree/employees) (Java Lanterna)
 
-💼 &nbsp; [Gestionnaire d'employés](https://github.com/NathanGeisbusch/formation-technobel/tree/employees)
+🐟 &nbsp; [Javaquarium](https://github.com/NathanGeisbusch/formation-technobel/tree/aquarium) (JavaFX)
 
-🐟 &nbsp; [Javaquarium](https://github.com/NathanGeisbusch/formation-technobel/tree/aquarium)
+📚 &nbsp; [Gestionnaire de bibliothèque](https://github.com/NathanGeisbusch/formation-technobel/tree/bibliotheque) (JavaFX)
 
-📚 &nbsp; [Gestionnaire de bibliothèque](https://github.com/NathanGeisbusch/formation-technobel/tree/bibliotheque)
+🍬 &nbsp; [Distributeur](https://github.com/NathanGeisbusch/formation-technobel/tree/distributeur) (HTML, CSS, JS)
 
-☕ &nbsp; [Code Java pour convertir un objet en JSON](https://github.com/NathanGeisbusch/formation-technobel/tree/json)
+🪪 &nbsp; [CV](https://github.com/NathanGeisbusch/formation-technobel/tree/cv) (HTML, CSS)
 
-🌐 &nbsp; [REST API en Spring Kotlin](https://github.com/NathanGeisbusch/formation-technobel/tree/playzone-backend)
+♻️ &nbsp; [Mockup Beco](https://github.com/NathanGeisbusch/formation-technobel/tree/mockup-beco) (Framework7)
 
-📄 &nbsp; [Parse Master (générateur de code)](https://github.com/NathanGeisbusch/formation-technobel/tree/parse-master)
+🌐 &nbsp; [REST API](https://github.com/NathanGeisbusch/formation-technobel/tree/playzone-backend) (Kotlin Spring)
 
-## HTML
-
-🍬 &nbsp; [Distributeur](https://github.com/NathanGeisbusch/formation-technobel/tree/distributeur)
-
-🖌️ &nbsp; [Zone de dessin](https://github.com/NathanGeisbusch/formation-technobel/tree/drawing-canvas)
-
-♻️ &nbsp; [Mockup Beco](https://github.com/NathanGeisbusch/formation-technobel/tree/mockup-beco)
-
-🪪 &nbsp; [CV](https://github.com/NathanGeisbusch/formation-technobel/tree/cv)
+📄 &nbsp; [Parse Master (Générateur de code)](https://github.com/NathanGeisbusch/formation-technobel/tree/parse-master) (Java Spring + Angular PrimeNG)
