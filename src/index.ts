@@ -19,7 +19,7 @@ class DrawingCanvas extends ShadowElement {
 	isDrawing = false;
 	canvas: HTMLCanvasElement = null;
 	context: CanvasRenderingContext2D = null;
-	calque: HTMLDivElement = null;
+	layer: HTMLDivElement = null;
 
 	startDrawing(ev) {
 		const {left, top} = this.canvas.getBoundingClientRect();
@@ -45,7 +45,7 @@ class DrawingCanvas extends ShadowElement {
 	}
 
 	toggleLayer() {
-		this.calque.classList.toggle('hide');
+		this.layer.classList.toggle('hide');
 	}
 
 	connectedCallback() {
@@ -64,7 +64,7 @@ class DrawingCanvas extends ShadowElement {
 		this.$(
 			$h1('Dessin'),
 			$div().class('container').add(
-				$div().class('calque hide').add($svg()),
+				$div().class('layer hide').add($svg()),
 				$canvas(720,480)
 				.listen('mousedown', ev => this.startDrawing(ev))
 				.listen('mousemove', ev => this.draw(ev))
@@ -98,7 +98,7 @@ class DrawingCanvas extends ShadowElement {
 			canvas {border: 1px solid black; background-color: #c4c4c4;}
 			p {font-size: 1.25rem}
 			.container {position: relative}
-			.calque {
+			.layer {
 				width: 720px; height: 480px;
 				display: flex; justify-content: center; align-items: center;
 				position: absolute; top: 0; left: 0; opacity: .5;
@@ -111,7 +111,7 @@ class DrawingCanvas extends ShadowElement {
 		this.canvas = this.shadowRoot.querySelector('canvas');
 		this.context = this.canvas.getContext('2d');
 		this.context.lineWidth = 4;
-		this.calque = this.shadowRoot.querySelector('.calque');
-		(this.calque.firstChild as HTMLElement).outerHTML = cat;
+		this.layer = this.shadowRoot.querySelector('.layer');
+		(this.layer.firstChild as HTMLElement).outerHTML = cat;
 	}
 }
