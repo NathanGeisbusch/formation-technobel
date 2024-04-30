@@ -9,6 +9,7 @@ Vous trouverez ici les différents exercices et projets que j'ai réalisés dans
 | 🐟 &nbsp; [Javaquarium](https://github.com/NathanGeisbusch/formation-technobel/tree/aquarium) | [JavaFX](https://openjfx.io/) |
 | 📚 &nbsp; [Gestionnaire de bibliothèque](https://github.com/NathanGeisbusch/formation-technobel/tree/bibliotheque) | [JavaFX](https://openjfx.io/), [JDBC](https://www.geeksforgeeks.org/introduction-to-jdbc/), [SQLite](https://www.sqlite.org/) |
 | 🍬 &nbsp; [Distributeur](https://github.com/NathanGeisbusch/formation-technobel/tree/distributeur) | [HTML](https://developer.mozilla.org/fr/docs/Web/HTML), [CSS](https://developer.mozilla.org/fr/docs/Web/CSS), [JS](https://developer.mozilla.org/fr/docs/Web/JavaScript) |
+| 🖌️ &nbsp; [Composant web de dessin](https://github.com/NathanGeisbusch/formation-technobel/tree/drawing-canvas) | [Pug](https://pugjs.org/), [SCSS](https://sass-lang.com/), [Typescript](https://www.typescriptlang.org/) |
 | 🪪 &nbsp; [CV](https://github.com/NathanGeisbusch/formation-technobel/tree/cv) | [Pug](https://pugjs.org/), [SCSS](https://sass-lang.com/) |
 | ♻️ &nbsp; [Mockup Beco](https://github.com/NathanGeisbusch/formation-technobel/tree/mockup-beco) | [Framework7](https://framework7.io/) |
 | 🌐 &nbsp; [REST API](https://github.com/NathanGeisbusch/formation-technobel/tree/playzone-backend) | [Kotlin](https://kotlinlang.org/), [Spring](https://spring.io/) |
